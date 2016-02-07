@@ -1,0 +1,333 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		17C8B1DA19E2E45813EAAAF8 /* GERazerDeviceManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 17C8B7DB0C4C7BC31904D57A /* GERazerDeviceManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		17C8B2353C43F863C956404F /* GERazerStandardBehavior.h in Headers */ = {isa = PBXBuildFile; fileRef = 17C8B0C893B74CE0A1E051E9 /* GERazerStandardBehavior.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		17C8B3915A1B61D6074F3B5C /* GERazerMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 17C8BC9C4CD7BC825001BC88 /* GERazerMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		17C8B984A28ADE4A0BB75BF0 /* GERazerStandardMessages.h in Headers */ = {isa = PBXBuildFile; fileRef = 17C8B4E5AF74F8459987CAEA /* GERazerStandardMessages.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		17C8BC26B9DB1EB40BB5DD64 /* GERazerChroma.h in Headers */ = {isa = PBXBuildFile; fileRef = 17C8B6F88B68D60CD7BCC4C9 /* GERazerChroma.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		17C8BCBE185DFDB350BEE8F8 /* GERazerMessage.c in Sources */ = {isa = PBXBuildFile; fileRef = 17C8B898BE47C0A40A7C190A /* GERazerMessage.c */; };
+		17C8BD4C2F99B2CE89C06366 /* GERazerStandardMessages.c in Sources */ = {isa = PBXBuildFile; fileRef = 17C8B25CE60FB3393A1C4E5F /* GERazerStandardMessages.c */; };
+		17C8BD54EFE5BC4E19ED4577 /* GERazerKit.c in Sources */ = {isa = PBXBuildFile; fileRef = 17C8B940926E8EEB02206B76 /* GERazerKit.c */; };
+		17C8BDA62DDEC951CAE014D2 /* GERazerStandardBehavior.c in Sources */ = {isa = PBXBuildFile; fileRef = 17C8B40F226CB91919246342 /* GERazerStandardBehavior.c */; };
+		17C8BEF53D6151687EE0FB1B /* GERazerDeviceManager.c in Sources */ = {isa = PBXBuildFile; fileRef = 17C8B1507008A23D6FDB7D3A /* GERazerDeviceManager.c */; };
+		B554CFF91C66A7DF00647488 /* GERazerKit.h in Headers */ = {isa = PBXBuildFile; fileRef = B554CFF81C66A7DF00647488 /* GERazerKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		17C8B0C893B74CE0A1E051E9 /* GERazerStandardBehavior.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GERazerStandardBehavior.h; sourceTree = "<group>"; };
+		17C8B1507008A23D6FDB7D3A /* GERazerDeviceManager.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = GERazerDeviceManager.c; sourceTree = "<group>"; };
+		17C8B25CE60FB3393A1C4E5F /* GERazerStandardMessages.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = GERazerStandardMessages.c; sourceTree = "<group>"; };
+		17C8B40F226CB91919246342 /* GERazerStandardBehavior.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = GERazerStandardBehavior.c; sourceTree = "<group>"; };
+		17C8B4E5AF74F8459987CAEA /* GERazerStandardMessages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GERazerStandardMessages.h; sourceTree = "<group>"; };
+		17C8B6F88B68D60CD7BCC4C9 /* GERazerChroma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GERazerChroma.h; sourceTree = "<group>"; };
+		17C8B7DB0C4C7BC31904D57A /* GERazerDeviceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GERazerDeviceManager.h; sourceTree = "<group>"; };
+		17C8B898BE47C0A40A7C190A /* GERazerMessage.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = GERazerMessage.c; sourceTree = "<group>"; };
+		17C8B940926E8EEB02206B76 /* GERazerKit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = GERazerKit.c; sourceTree = "<group>"; };
+		17C8BC9C4CD7BC825001BC88 /* GERazerMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GERazerMessage.h; sourceTree = "<group>"; };
+		B554CFF51C66A7DF00647488 /* GERazerKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GERazerKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B554CFF81C66A7DF00647488 /* GERazerKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GERazerKit.h; sourceTree = "<group>"; };
+		B554CFFA1C66A7DF00647488 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B554CFF11C66A7DF00647488 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B554CFEB1C66A7DF00647488 = {
+			isa = PBXGroup;
+			children = (
+				B554CFF71C66A7DF00647488 /* GERazerKit */,
+				B554CFF61C66A7DF00647488 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B554CFF61C66A7DF00647488 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B554CFF51C66A7DF00647488 /* GERazerKit.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B554CFF71C66A7DF00647488 /* GERazerKit */ = {
+			isa = PBXGroup;
+			children = (
+				B554CFF81C66A7DF00647488 /* GERazerKit.h */,
+				B554CFFA1C66A7DF00647488 /* Info.plist */,
+				17C8BC9C4CD7BC825001BC88 /* GERazerMessage.h */,
+				17C8B7DB0C4C7BC31904D57A /* GERazerDeviceManager.h */,
+				17C8B1507008A23D6FDB7D3A /* GERazerDeviceManager.c */,
+				17C8B898BE47C0A40A7C190A /* GERazerMessage.c */,
+				17C8B4E5AF74F8459987CAEA /* GERazerStandardMessages.h */,
+				17C8B25CE60FB3393A1C4E5F /* GERazerStandardMessages.c */,
+				17C8B0C893B74CE0A1E051E9 /* GERazerStandardBehavior.h */,
+				17C8B40F226CB91919246342 /* GERazerStandardBehavior.c */,
+				17C8B6F88B68D60CD7BCC4C9 /* GERazerChroma.h */,
+				17C8B940926E8EEB02206B76 /* GERazerKit.c */,
+			);
+			path = GERazerKit;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		B554CFF21C66A7DF00647488 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B554CFF91C66A7DF00647488 /* GERazerKit.h in Headers */,
+				17C8B3915A1B61D6074F3B5C /* GERazerMessage.h in Headers */,
+				17C8B1DA19E2E45813EAAAF8 /* GERazerDeviceManager.h in Headers */,
+				17C8B984A28ADE4A0BB75BF0 /* GERazerStandardMessages.h in Headers */,
+				17C8B2353C43F863C956404F /* GERazerStandardBehavior.h in Headers */,
+				17C8BC26B9DB1EB40BB5DD64 /* GERazerChroma.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		B554CFF41C66A7DF00647488 /* GERazerKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B554CFFD1C66A7DF00647488 /* Build configuration list for PBXNativeTarget "GERazerKit" */;
+			buildPhases = (
+				B554CFF01C66A7DF00647488 /* Sources */,
+				B554CFF11C66A7DF00647488 /* Frameworks */,
+				B554CFF21C66A7DF00647488 /* Headers */,
+				B554CFF31C66A7DF00647488 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GERazerKit;
+			productName = GERazerKit;
+			productReference = B554CFF51C66A7DF00647488 /* GERazerKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B554CFEC1C66A7DF00647488 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = "Glass Echidna Pty Ltd";
+				TargetAttributes = {
+					B554CFF41C66A7DF00647488 = {
+						CreatedOnToolsVersion = 7.2;
+					};
+				};
+			};
+			buildConfigurationList = B554CFEF1C66A7DF00647488 /* Build configuration list for PBXProject "GERazerKit" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = B554CFEB1C66A7DF00647488;
+			productRefGroup = B554CFF61C66A7DF00647488 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B554CFF41C66A7DF00647488 /* GERazerKit */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B554CFF31C66A7DF00647488 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B554CFF01C66A7DF00647488 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				17C8BEF53D6151687EE0FB1B /* GERazerDeviceManager.c in Sources */,
+				17C8BCBE185DFDB350BEE8F8 /* GERazerMessage.c in Sources */,
+				17C8BD4C2F99B2CE89C06366 /* GERazerStandardMessages.c in Sources */,
+				17C8BDA62DDEC951CAE014D2 /* GERazerStandardBehavior.c in Sources */,
+				17C8BD54EFE5BC4E19ED4577 /* GERazerKit.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		B554CFFB1C66A7DF00647488 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_LINK_OBJC_RUNTIME = NO;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		B554CFFC1C66A7DF00647488 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_LINK_OBJC_RUNTIME = NO;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		B554CFFE1C66A7DF00647488 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = GERazerKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = au.com.glassechidna.GERazerKit;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		B554CFFF1C66A7DF00647488 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = GERazerKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = au.com.glassechidna.GERazerKit;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B554CFEF1C66A7DF00647488 /* Build configuration list for PBXProject "GERazerKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B554CFFB1C66A7DF00647488 /* Debug */,
+				B554CFFC1C66A7DF00647488 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B554CFFD1C66A7DF00647488 /* Build configuration list for PBXNativeTarget "GERazerKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B554CFFE1C66A7DF00647488 /* Debug */,
+				B554CFFF1C66A7DF00647488 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B554CFEC1C66A7DF00647488 /* Project object */;
+}
