@@ -21,4 +21,24 @@ SInt32 GERazerMessageGetId(GERazerMessageRef message);
 //! Keys must be CFString, and values property list (plist) compatible CFType.
 CFMutableDictionaryRef GERazerMessageGetData(GERazerMessageRef message);
 
+CFHashCode GERazerMessageHash(GERazerMessageRef message);
+
+bool GERazerMessageEqual(GERazerMessageRef message1, GERazerMessageRef message2);
+
+// Core foundation data structure callbacks
+
+const void *GERazerMessageRetainCallback(CFAllocatorRef allocator, const void *value);
+void GERazerMessageReleaseCallback(CFAllocatorRef allocator, const void *value);
+Boolean	GERazerMessageEqualCallback(const void *value1, const void *value2);
+CFHashCode GERazerMessageHashCallback(const void *value);
+
+extern CFArrayCallBacks kGERazerMessageArrayCallbacks;
+
+extern const CFIndex kGERazerTerminate;
+
+//! vargs must be CFStringRef or CFIndex (for looking into nested arrays) and you *must* terminate
+//! the varg list with a kGERazerTerminate e.g.
+//! GERazerMessageGetDataValue(message, CFSTR("AllDevSettings"), CFSTR("Profiles"), 0, kGERazerTerminate);
+CFPropertyListRef GERazerMessageGetDataValue(GERazerMessageRef message, ...);
+
 #endif /* ! __GERAZERKIT_GERAZERMESSAGE__ */

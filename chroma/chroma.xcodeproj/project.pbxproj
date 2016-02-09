@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B55FBD191C67C917009634D0 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = B55FBD181C67C917009634D0 /* main.c */; };
+		B55FBD191C67C917009634D0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B55FBD181C67C917009634D0 /* main.m */; };
 		B55FBD261C67C97C009634D0 /* GERazerKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B55FBD251C67C97C009634D0 /* GERazerKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -25,8 +25,9 @@
 
 /* Begin PBXFileReference section */
 		B55FBD151C67C917009634D0 /* chroma */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = chroma; sourceTree = BUILT_PRODUCTS_DIR; };
-		B55FBD181C67C917009634D0 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		B55FBD181C67C917009634D0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B55FBD251C67C97C009634D0 /* GERazerKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GERazerKit.framework; path = ../GERazerKit/build/Debug/GERazerKit.framework; sourceTree = "<group>"; };
+		B55FBD271C68FA0F009634D0 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +45,7 @@
 		B55FBD0C1C67C917009634D0 = {
 			isa = PBXGroup;
 			children = (
+				B55FBD271C68FA0F009634D0 /* Cocoa.framework */,
 				B55FBD251C67C97C009634D0 /* GERazerKit.framework */,
 				B55FBD171C67C917009634D0 /* chroma */,
 				B55FBD161C67C917009634D0 /* Products */,
@@ -61,7 +63,7 @@
 		B55FBD171C67C917009634D0 /* chroma */ = {
 			isa = PBXGroup;
 			children = (
-				B55FBD181C67C917009634D0 /* main.c */,
+				B55FBD181C67C917009634D0 /* main.m */,
 			);
 			path = chroma;
 			sourceTree = "<group>";
@@ -122,7 +124,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B55FBD191C67C917009634D0 /* main.c in Sources */,
+				B55FBD191C67C917009634D0 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

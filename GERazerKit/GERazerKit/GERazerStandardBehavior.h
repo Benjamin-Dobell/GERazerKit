@@ -3,4 +3,7 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 
+CFArrayRef GERazerCopyAttachedDeviceIds(void);
+CFStringRef GERazerCopyActiveProfileId(SInt32 productId);
+
 #endif /* ! __GERAZERKIT_GERAZERSTANDARDBEHAVIOR__ */

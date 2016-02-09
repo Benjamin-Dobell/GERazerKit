@@ -81,3 +81,136 @@ CFMutableDictionaryRef GERazerMessageGetData(GERazerMessageRef message)
 {
 	return message->_data;
 }
+
+CFHashCode GERazerMessageHash(GERazerMessageRef message)
+{
+	return 31 * CFHash(message->_data) + message->_id;
+}
+
+bool GERazerMessageEqual(GERazerMessageRef message1, GERazerMessageRef message2)
+{
+	return message1->_id == message2->_id && CFEqual(message1->_data, message2->_data);
+}
+
+const void *GERazerMessageRetainCallback(CFAllocatorRef allocator, const void *value)
+{
+	GERazerMessageRef message = (GERazerMessageRef) value;
+	GERazerMessageRetain(message);
+	return message;
+}
+
+void GERazerMessageReleaseCallback(CFAllocatorRef allocator, const void *value)
+{
+	GERazerMessageRef message = (GERazerMessageRef) value;
+	GERazerMessageRelease(message);
+}
+
+Boolean	GERazerMessageEqualCallback(const void *value1, const void *value2)
+{
+	return GERazerMessageEqual((GERazerMessageRef) value1, (GERazerMessageRef) value2);
+}
+
+CFHashCode GERazerMessageHashCallback(const void *value)
+{
+	return GERazerMessageHash((GERazerMessageRef) value);
+}
+
+CFArrayCallBacks kGERazerMessageArrayCallbacks = {
+	.retain = &GERazerMessageRetainCallback,
+	.release = &GERazerMessageReleaseCallback,
+	.equal = &GERazerMessageEqualCallback,
+	.version = 0
+};
+
+#if __LLP64__
+const CFIndex kGERazerTerminate = LLONG_MIN;
+#else
+const CFIndex kGERazerTerminate = LONG_MIN;
+#endif
+
+CFPropertyListRef GERazerMessageDataArrayGetValue(CFArrayRef array, va_list argp);
+
+CFPropertyListRef GERazerMessageDataDictionaryGetValue(CFDictionaryRef dictionary, va_list argp)
+{
+	CFStringRef key = va_arg(argp, CFStringRef);
+
+	if ((CFIndex) key == kGERazerTerminate)
+	{
+		return dictionary;
+	}
+	else
+	{
+		CFPropertyListRef value = CFDictionaryGetValue(dictionary, key);
+
+		if (value)
+		{
+			CFTypeID typeID = CFGetTypeID(value);
+
+			if (typeID == CFDictionaryGetTypeID())
+			{
+				return GERazerMessageDataDictionaryGetValue(value, argp);
+			}
+			else if (typeID == CFArrayGetTypeID())
+			{
+				return GERazerMessageDataArrayGetValue(value, argp);
+			}
+			else if (va_arg(argp, CFStringRef) == kGERazerTerminate)
+			{
+				return value;
+			}
+		}
+	}
+
+	return NULL;
+}
+
+CFPropertyListRef GERazerMessageDataArrayGetValue(CFArrayRef array, va_list argp)
+{
+	CFIndex index = va_arg(argp, CFIndex);
+
+	if (index == kGERazerTerminate)
+	{
+		return array;
+	}
+	else
+	{
+		if (index < CFArrayGetCount(array))
+		{
+			CFPropertyListRef value = CFArrayGetValueAtIndex(array, index);
+
+			if (value)
+			{
+				CFTypeID typeID = CFGetTypeID(value);
+
+				if (typeID == CFDictionaryGetTypeID())
+				{
+					return GERazerMessageDataDictionaryGetValue(value, argp);
+				}
+				else if (typeID == CFArrayGetTypeID())
+				{
+					return GERazerMessageDataArrayGetValue(value, argp);
+				}
+				else if (va_arg(argp, CFStringRef) == kGERazerTerminate)
+				{
+					return value;
+				}
+			}
+		}
+	}
+
+	return NULL;
+}
+
+CFPropertyListRef GERazerMessageGetDataValue(GERazerMessageRef message, ...)
+{
+	CFPropertyListRef result = NULL;
+
+	va_list argp;
+	va_start(argp, message);
+
+	result = GERazerMessageDataDictionaryGetValue(GERazerMessageGetData(message), argp);
+
+	va_end(argp);
+
+	return result;
+}

@@ -10,7 +10,7 @@
 #define __GERAZERKIT_GERAZERKIT__ 1
 
 #include <GERazerKit/GERazerChroma.h>
-#include <GERazerKit/GERazerDeviceManager.h>
+#include <GERazerKit/GERazerIPC.h>
 #include <GERazerKit/GERazerStandardMessages.h>
 #include <GERazerKit/GERazerStandardBehavior.h>
 
@@ -19,10 +19,5 @@ extern double GERazerKitVersionNumber;
 
 //! Project version string for GERazerKit.
 extern const unsigned char GERazerKitVersionString[];
-
-//! Should only be called before using other GERazer APIs, or not at all. By default the "main" run loop is used.
-void GERazerRunLoopSet(CFRunLoopRef runLoop);
-
-CFRunLoopRef GERazerRunLoopGet(void);
 
 #endif /* ! __GERAZERKIT_GERAZERKIT__ */
