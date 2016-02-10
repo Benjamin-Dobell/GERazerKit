@@ -1,6 +1,7 @@
 #include "GERazerStandardBehavior.h"
 #include "GERazerIPC.h"
 #include "GERazerStandardMessages.h"
+#include "GERazerKit.h"
 
 CFTimeInterval kGERazerStandardBehaviourReceiveTimeout = 1.0;
 
@@ -54,4 +55,30 @@ CFStringRef GERazerCopyActiveProfileId(SInt32 productId)
 	}
 
 	return profileId;
+}
+
+SInt32 GERazerGetLedFollowingProductId(SInt32 productId)
+{
+	GERazerMessageRef message = GERazerMessageCreateAllSettingsRequest(productId);
+	GERazerSendMessage(message);
+	GERazerMessageRelease(message);
+
+	GERazerMessageRef responseMessage;
+	GERazerReceiveMessage(kGERazerMessageIdDeviceAllSettings, &responseMessage, kGERazerStandardBehaviourReceiveTimeout);
+
+	SInt32 followingProductId = kGERazerProductIdNone;
+
+	if (responseMessage)
+	{
+		CFNumberRef boxedFollowingProductId = GERazerMessageGetDataValue(responseMessage, CFSTR("AllDevSettings"), CFSTR("Profiles"), 0, CFSTR("LEDChromaFollow"), CFSTR("PID"), kGERazerTerminate);
+
+		if (boxedFollowingProductId)
+		{
+			CFNumberGetValue(boxedFollowingProductId, kCFNumberSInt32Type, &followingProductId);
+		}
+
+		GERazerMessageRelease(responseMessage);
+	}
+
+	return followingProductId;
 }

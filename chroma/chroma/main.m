@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import <GERazerKit/GERazerKit.h>
-#import <GERazerKit/GERazerMamba.h>
 
 int main(int argc, const char *argv[])
 {
@@ -35,7 +34,6 @@ int main(int argc, const char *argv[])
 	}
 
 	SInt32 productId = [attachedDevices[0] intValue];
-
 	NSString *profileId = (__bridge_transfer NSString *) GERazerCopyActiveProfileId(productId);
 
 	if (!profileId)
@@ -44,11 +42,63 @@ int main(int argc, const char *argv[])
 		return 2;
 	}
 
-	GERazerMessageRef message = GERazerMessageCreateEnableLedEffectRequest(productId, (__bridge CFStringRef) profileId, kLedIdMamba, kGERazerEffectIdWave);
-	GERazerSendMessage(message);
-	GERazerMessageRelease(message);
+	SInt32 followingProductId = GERazerGetLedFollowingProductId(productId);
 
-	printf("Done");
+	// Configure effects
+
+	CFMutableDictionaryRef dockEffects = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+	GERazerDictionarySetThenReleaseValue(dockEffects, kGERazerEffectNameSpectrumCycling, GERazerEffectCreateSpectrumCycling());
+	GERazerDictionarySetThenReleaseValue(dockEffects, kGERazerEffectNameBreathing, GERazerEffectCreateBreathing(0.0, 1.0, 0.0, 1.0, 1.0, 1.0));
+	GERazerDictionarySetThenReleaseValue(dockEffects, kGERazerEffectNameStatic, GERazerEffectCreateStatic(1.0, 1.0, 0.0));
+
+	CFMutableDictionaryRef mouseEffects = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+	GERazerDictionarySetThenReleaseValue(mouseEffects, kGERazerEffectNameSpectrumCycling, GERazerEffectCreateSpectrumCycling());
+	GERazerDictionarySetThenReleaseValue(mouseEffects, kGERazerEffectNameBreathing, GERazerEffectCreateSpectrumCycling());
+	GERazerDictionarySetThenReleaseValue(mouseEffects, kGERazerEffectNameWave, GERazerEffectCreateWave(kGERazerWaveDirectionBackToFront));
+	GERazerDictionarySetThenReleaseValue(mouseEffects, kGERazerEffectNameStatic, GERazerEffectCreateStatic(1.0, 1.0, 0.0));
+	GERazerDictionarySetThenReleaseValue(mouseEffects, kGERazerEffectNameReactive, GERazerEffectCreateReactive(0.0, 1.0, 0.0, kGERazerReactiveAfterglowDurationShort));
+
+	CFStringRef dockIdString = GERazerStringCreateFromInt(kGERazerLedIdMambaDock);
+	CFStringRef mouseIdString = GERazerStringCreateFromInt(kGERazerLedIdMambaMouse);
+
+	CFMutableDictionaryRef effectList = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+	CFDictionarySetValue(effectList, dockIdString, dockEffects);
+	CFDictionarySetValue(effectList, mouseIdString, mouseEffects);
+
+	CFRelease(dockEffects);
+	CFRelease(mouseEffects);
+
+	CFRelease(dockIdString);
+	CFRelease(mouseIdString);
+
+	CFMutableDictionaryRef deviceSettings = GERazerDeviceSettingsCreateWithLedEffectList(effectList);
+
+	CFRelease(effectList);
+
+	GERazerDictionaryRecursivelyMergeThenReleaseDictionary(deviceSettings, GERazerDeviceSettingsCreateWithEnabledLightingEffect(kGERazerLedIdMambaDock, kGERazerEffectIdBreathing));
+	GERazerDictionaryRecursivelyMergeThenReleaseDictionary(deviceSettings, GERazerDeviceSettingsCreateWithEnabledLightingEffect(kGERazerLedIdMambaMouse, kGERazerEffectIdReactive));
+
+	if (followingProductId != kGERazerProductIdNone)
+	{
+		GERazerDictionaryRecursivelyMergeThenReleaseDictionary(deviceSettings, GERazerDeviceSettingsCreateWithLedFollowingProduct(followingProductId, false));
+	}
+
+	GERazerMessageRef deviceSettingsMessage = GERazerMessageCreateAssignDeviceSettingsRequest(productId, (__bridge CFStringRef) profileId, deviceSettings);
+
+	CFRelease(deviceSettings);
+
+	GERazerSendMessage(deviceSettingsMessage);
+	GERazerMessageRelease(deviceSettingsMessage);
+
+	GERazerMessageRef receivedMessage;
+	GERazerReceiveMessage(kGERazerMessageIdReturnDictionary, &receivedMessage, 1.0);
+
+	if (receivedMessage)
+	{
+		GERazerMessageRelease(receivedMessage);
+	}
+
+	printf("Done\n");
 
 	return 0;
 }

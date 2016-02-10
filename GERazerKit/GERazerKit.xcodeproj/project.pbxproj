@@ -10,13 +10,16 @@
 		17C8B1DA19E2E45813EAAAF8 /* GERazerIPC.h in Headers */ = {isa = PBXBuildFile; fileRef = 17C8B7DB0C4C7BC31904D57A /* GERazerIPC.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		17C8B2353C43F863C956404F /* GERazerStandardBehavior.h in Headers */ = {isa = PBXBuildFile; fileRef = 17C8B0C893B74CE0A1E051E9 /* GERazerStandardBehavior.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		17C8B3915A1B61D6074F3B5C /* GERazerMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 17C8BC9C4CD7BC825001BC88 /* GERazerMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		17C8B859DC4F7465EB1068D3 /* GERazerUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 17C8B4F1F0E8BB62B01E9DE7 /* GERazerUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		17C8B8EA057DC3D02E159AB6 /* GERazerMamba.h in Headers */ = {isa = PBXBuildFile; fileRef = 17C8BFB8D3F628E185AFF85A /* GERazerMamba.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		17C8B93A4D14288BEAFEA245 /* GERazerUtils.c in Sources */ = {isa = PBXBuildFile; fileRef = 17C8BE02CF61FADFF2E0C0AA /* GERazerUtils.c */; };
 		17C8B984A28ADE4A0BB75BF0 /* GERazerStandardMessages.h in Headers */ = {isa = PBXBuildFile; fileRef = 17C8B4E5AF74F8459987CAEA /* GERazerStandardMessages.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		17C8BC26B9DB1EB40BB5DD64 /* GERazerChroma.h in Headers */ = {isa = PBXBuildFile; fileRef = 17C8B6F88B68D60CD7BCC4C9 /* GERazerChroma.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		17C8BCBE185DFDB350BEE8F8 /* GERazerMessage.c in Sources */ = {isa = PBXBuildFile; fileRef = 17C8B898BE47C0A40A7C190A /* GERazerMessage.c */; };
 		17C8BD4C2F99B2CE89C06366 /* GERazerStandardMessages.c in Sources */ = {isa = PBXBuildFile; fileRef = 17C8B25CE60FB3393A1C4E5F /* GERazerStandardMessages.c */; };
 		17C8BDA62DDEC951CAE014D2 /* GERazerStandardBehavior.c in Sources */ = {isa = PBXBuildFile; fileRef = 17C8B40F226CB91919246342 /* GERazerStandardBehavior.c */; };
 		17C8BEF53D6151687EE0FB1B /* GERazerIPC.c in Sources */ = {isa = PBXBuildFile; fileRef = 17C8B1507008A23D6FDB7D3A /* GERazerIPC.c */; };
+		17C8BFD765A9FC01786E1776 /* GERazerChroma.c in Sources */ = {isa = PBXBuildFile; fileRef = 17C8B851B2956E4B1420B168 /* GERazerChroma.c */; };
 		B554CFF91C66A7DF00647488 /* GERazerKit.h in Headers */ = {isa = PBXBuildFile; fileRef = B554CFF81C66A7DF00647488 /* GERazerKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
@@ -26,10 +29,13 @@
 		17C8B25CE60FB3393A1C4E5F /* GERazerStandardMessages.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = GERazerStandardMessages.c; sourceTree = "<group>"; };
 		17C8B40F226CB91919246342 /* GERazerStandardBehavior.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = GERazerStandardBehavior.c; sourceTree = "<group>"; };
 		17C8B4E5AF74F8459987CAEA /* GERazerStandardMessages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GERazerStandardMessages.h; sourceTree = "<group>"; };
+		17C8B4F1F0E8BB62B01E9DE7 /* GERazerUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GERazerUtils.h; sourceTree = "<group>"; };
 		17C8B6F88B68D60CD7BCC4C9 /* GERazerChroma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GERazerChroma.h; sourceTree = "<group>"; };
 		17C8B7DB0C4C7BC31904D57A /* GERazerIPC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GERazerIPC.h; sourceTree = "<group>"; };
+		17C8B851B2956E4B1420B168 /* GERazerChroma.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = GERazerChroma.c; sourceTree = "<group>"; };
 		17C8B898BE47C0A40A7C190A /* GERazerMessage.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = GERazerMessage.c; sourceTree = "<group>"; };
 		17C8BC9C4CD7BC825001BC88 /* GERazerMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GERazerMessage.h; sourceTree = "<group>"; };
+		17C8BE02CF61FADFF2E0C0AA /* GERazerUtils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = GERazerUtils.c; sourceTree = "<group>"; };
 		17C8BFB8D3F628E185AFF85A /* GERazerMamba.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GERazerMamba.h; sourceTree = "<group>"; };
 		B554CFF51C66A7DF00647488 /* GERazerKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GERazerKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B554CFF81C66A7DF00647488 /* GERazerKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GERazerKit.h; sourceTree = "<group>"; };
@@ -78,6 +84,9 @@
 				17C8B40F226CB91919246342 /* GERazerStandardBehavior.c */,
 				17C8B6F88B68D60CD7BCC4C9 /* GERazerChroma.h */,
 				17C8BFB8D3F628E185AFF85A /* GERazerMamba.h */,
+				17C8B851B2956E4B1420B168 /* GERazerChroma.c */,
+				17C8B4F1F0E8BB62B01E9DE7 /* GERazerUtils.h */,
+				17C8BE02CF61FADFF2E0C0AA /* GERazerUtils.c */,
 			);
 			path = GERazerKit;
 			sourceTree = "<group>";
@@ -96,6 +105,7 @@
 				17C8B2353C43F863C956404F /* GERazerStandardBehavior.h in Headers */,
 				17C8BC26B9DB1EB40BB5DD64 /* GERazerChroma.h in Headers */,
 				17C8B8EA057DC3D02E159AB6 /* GERazerMamba.h in Headers */,
+				17C8B859DC4F7465EB1068D3 /* GERazerUtils.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,6 +180,8 @@
 				17C8BCBE185DFDB350BEE8F8 /* GERazerMessage.c in Sources */,
 				17C8BD4C2F99B2CE89C06366 /* GERazerStandardMessages.c in Sources */,
 				17C8BDA62DDEC951CAE014D2 /* GERazerStandardBehavior.c in Sources */,
+				17C8BFD765A9FC01786E1776 /* GERazerChroma.c in Sources */,
+				17C8B93A4D14288BEAFEA245 /* GERazerUtils.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

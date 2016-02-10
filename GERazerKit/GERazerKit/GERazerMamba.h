@@ -5,8 +5,8 @@
 
 CF_ENUM(SInt32)
 {
-	kLedIdMamba = 5,
-	kLedIdMambaDock = 15
+	kGERazerLedIdMambaMouse = 5,
+	kGERazerLedIdMambaDock = 15
 };
 
 #endif /* ! __GERAZERKIT_GERAZERMAMBA__ */

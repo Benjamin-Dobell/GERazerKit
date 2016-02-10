@@ -16,10 +16,10 @@ void GERazerMessageRetain(GERazerMessageRef message);
 
 void GERazerMessageRelease(GERazerMessageRef message);
 
-SInt32 GERazerMessageGetId(GERazerMessageRef message);
+SInt32 GERazerMessageGetId(const GERazerMessageRef message);
 
 //! Keys must be CFString, and values property list (plist) compatible CFType.
-CFMutableDictionaryRef GERazerMessageGetData(GERazerMessageRef message);
+CFMutableDictionaryRef GERazerMessageGetData(const GERazerMessageRef message);
 
 CFHashCode GERazerMessageHash(GERazerMessageRef message);
 

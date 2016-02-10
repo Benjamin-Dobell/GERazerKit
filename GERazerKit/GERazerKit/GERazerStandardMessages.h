@@ -11,6 +11,7 @@ CF_ENUM(SInt32)
 	kGERazerMessageIdDeviceBatteryPercentage = 15,
 	kGERazerMessageIdDeviceChargingStatus = 16,
 	kGERazerMessageIdAttachedDevices = 56,
+	kGERazerMessageIdReturnDictionary = 58, // Typical response to kGERazerMessageIdAssignDeviceSettings
 	kGERazerMessageIdDeviceBasicInfo = 68,
 	kGERazerMessageIdDeviceConnected = 69,
 	kGERazerMessageIdDeviceSurfaceCalibration = 74,
@@ -23,6 +24,12 @@ GERazerMessageRef GERazerMessageCreateAttachedDevicesRequest(void);
 
 GERazerMessageRef GERazerMessageCreateAllSettingsRequest(SInt32 productId);
 
-GERazerMessageRef GERazerMessageCreateEnableLedEffectRequest(SInt32 productId, CFStringRef profileId, SInt32 ledId, SInt32 effectId);
+GERazerMessageRef GERazerMessageCreateAssignDeviceSettingsRequest(SInt32 productId, CFStringRef profileId, CFDictionaryRef deviceSettings);
+
+CFMutableDictionaryRef GERazerDeviceSettingsCreateWithLedFollowingProduct(SInt32 productId, bool followingEnabled);
+
+CFMutableDictionaryRef GERazerDeviceSettingsCreateWithLedEffectList(CFDictionaryRef ledEffectList);
+
+CFMutableDictionaryRef GERazerDeviceSettingsCreateWithEnabledLightingEffect(SInt32 ledId, SInt32 effectId);
 
 #endif /* ! __GERAZERKIT_GERAZERSTANDARDMESSAGES__ */

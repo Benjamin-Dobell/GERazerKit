@@ -11,13 +11,14 @@ CFMutableArrayRef blockingReceiveMessages = false;
 SInt32 *blockingReceiveMessageIds = NULL;
 CFIndex blockingReceiveMessageIdCount = 0;
 bool *blockingReceiveReceivedMessageIdMap = NULL;
+CFMutableArrayRef blockingReceiveCallbackableMessages = NULL;
 
 CFRunLoopRef GERazerReceiveRunLoopGet(void)
 {
 	return receiveRunLoop;
 }
 
-CFMutableArrayRef GERazerDeviceManagerDisconnectedCallbacks()
+CFMutableArrayRef GERazerDeviceManagerGetDisconnectedCallbacks(void)
 {
 	static CFMutableArrayRef disconnnectedCallbacks = NULL;
 
@@ -29,22 +30,42 @@ CFMutableArrayRef GERazerDeviceManagerDisconnectedCallbacks()
 	return disconnnectedCallbacks;
 }
 
-CFMutableDictionaryRef GERazerDeviceManagerMessageReceivedCallbacks()
+CFMutableDictionaryRef GERazerDeviceManagerGetMessageReceivedCallbacks(void)
 {
 	static CFMutableDictionaryRef messageReceivedCallbacks = NULL;
 
 	if (!messageReceivedCallbacks)
 	{
-		messageReceivedCallbacks = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, NULL, NULL);
+		messageReceivedCallbacks = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, NULL, &kCFTypeDictionaryValueCallBacks);
 	}
 
 	return messageReceivedCallbacks;
 }
 
-CFMutableArrayRef GERazerDeviceManagerGetMessageReceivedCallbacks(SInt32 messageId)
+CFIndex GERazerDeviceManagerGetMessageReceivedCallbackCount(SInt32 messageId)
 {
-	CFMutableDictionaryRef callbacks = GERazerDeviceManagerMessageReceivedCallbacks();
-	return (CFMutableArrayRef) CFDictionaryGetValue(callbacks, (void *) (CFIndex) messageId);
+	CFArrayRef messageCallbacks = CFDictionaryGetValue(GERazerDeviceManagerGetMessageReceivedCallbacks(), (const void *) (CFIndex) messageId);
+	return messageCallbacks ? CFArrayGetCount(messageCallbacks) : 0;
+}
+
+void GERazerDeviceManagerFireMessageReceivedCallbacks(const GERazerMessageRef message)
+{
+	CFArrayRef messageCallbacks = CFDictionaryGetValue(GERazerDeviceManagerGetMessageReceivedCallbacks(), (const void *) (CFIndex) GERazerMessageGetId(message));
+	CFIndex messageCallbackCount = messageCallbacks ? CFArrayGetCount(messageCallbacks) : 0;
+
+	if (messageCallbackCount > 0)
+	{
+		// We copy the array because a callback may alter it mid loop.
+		messageCallbacks = CFArrayCreateMutableCopy(kCFAllocatorDefault, messageCallbackCount, messageCallbacks);
+
+		for (int i = 0; i < messageCallbackCount; i++)
+		{
+			GERazerMessageReceivedCallback callback = CFArrayGetValueAtIndex(messageCallbacks, i);
+			callback(message);
+		}
+
+		CFRelease(messageCallbacks);
+	}
 }
 
 void GERazerDeviceManagerPortInvalidated(CFMessagePortRef ms, void *info)
@@ -63,7 +84,7 @@ void GERazerDeviceManagerPortInvalidated(CFMessagePortRef ms, void *info)
 
 	receiveRunLoop = NULL;
 
-	CFArrayRef callbacks = GERazerDeviceManagerDisconnectedCallbacks();
+	CFArrayRef callbacks = GERazerDeviceManagerGetDisconnectedCallbacks();
 	CFIndex count = CFArrayGetCount(callbacks);
 
 	for (CFIndex i = 0; i < count; i++)
@@ -113,11 +134,10 @@ void GERazerHandleExpectedBlockingMessage(GERazerMessageRef message)
 CFDataRef GERazerDeviceManagerMessageReceived(CFMessagePortRef local, SInt32 msgid, CFDataRef data, void *info)
 {
 	bool expectedBlockingMessage = receiveIsBlocking && GERazerIndexForBlockingMessageId(msgid) != kCFNotFound;
-	CFMutableArrayRef callbacks = GERazerDeviceManagerGetMessageReceivedCallbacks(msgid);
+	bool callbacksPresent = GERazerDeviceManagerGetMessageReceivedCallbackCount(msgid) > 0;
 
-	if (callbacks || expectedBlockingMessage)
+	if (callbacksPresent || expectedBlockingMessage)
 	{
-
 		GERazerMessageRef message = NULL;
 		CFDictionaryRef dictionary = CFPropertyListCreateWithData(kCFAllocatorDefault, data, 0, NULL, NULL);
 
@@ -137,17 +157,18 @@ CFDataRef GERazerDeviceManagerMessageReceived(CFMessagePortRef local, SInt32 msg
 
 		if (message)
 		{
-			CFIndex callbackCount = callbacks ? CFArrayGetCount(callbacks) : 0;
-
-			for (int i = 0; i < callbackCount; i++)
+			if (receiveIsBlocking)
 			{
-				GERazerMessageReceivedCallback callback = CFArrayGetValueAtIndex(callbacks, i);
-				callback(message);
+				CFArrayAppendValue(blockingReceiveCallbackableMessages, message);
+
+				if (expectedBlockingMessage)
+				{
+					GERazerHandleExpectedBlockingMessage(message);
+				}
 			}
-
-			if (expectedBlockingMessage)
+			else
 			{
-				GERazerHandleExpectedBlockingMessage(message);
+				GERazerDeviceManagerFireMessageReceivedCallbacks(message);
 			}
 
 			GERazerMessageRelease(message);
@@ -165,7 +186,7 @@ SInt32 GERazerConnect(GERazerDisconnectedCallback callback)
 {
 	if (callback)
 	{
-		CFMutableArrayRef callbacks = GERazerDeviceManagerDisconnectedCallbacks();
+		CFMutableArrayRef callbacks = GERazerDeviceManagerGetDisconnectedCallbacks();
 
 		if (CFArrayGetFirstIndexOfValue(callbacks, CFRangeMake(0, CFArrayGetCount(callbacks)), callback) == kCFNotFound)
 		{
@@ -213,7 +234,7 @@ SInt32 GERazerConnect(GERazerDisconnectedCallback callback)
 	return kGERazerConnectionSuccess;
 }
 
-void GERazerDisconnect()
+void GERazerDisconnect(void)
 {
 	if (sendPort)
 	{
@@ -223,7 +244,7 @@ void GERazerDisconnect()
 
 void GERazerRemoveDisconnectedCallback(GERazerDisconnectedCallback callback)
 {
-	CFMutableArrayRef callbacks = GERazerDeviceManagerDisconnectedCallbacks();
+	CFMutableArrayRef callbacks = GERazerDeviceManagerGetDisconnectedCallbacks();
 	CFIndex index = CFArrayGetFirstIndexOfValue(callbacks, CFRangeMake(0, CFArrayGetCount(callbacks)), callback);
 
 	if (index != kCFNotFound)
@@ -292,10 +313,10 @@ SInt32 GERazerSendMessage(GERazerMessageRef message)
 
 SInt32 GERazerReceiveMessage(SInt32 messageId, GERazerMessageRef *message, CFTimeInterval receiveTimeout)
 {
-	SInt32 messageIds = { messageId };
+	SInt32 messageIds[] = { messageId };
 	CFMutableArrayRef messages = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kGERazerMessageArrayCallbacks);
 
-	SInt32 status = GERazerReceiveMessages(&messageIds, 1, messages, receiveTimeout);
+	SInt32 status = GERazerReceiveMessages(messageIds, 1, messages, receiveTimeout);
 
 	if (CFArrayGetCount(messages) > 0)
 	{
@@ -326,26 +347,55 @@ SInt32 GERazerReceiveMessages(SInt32 *messageIds, CFIndex messageIdCount, CFMuta
 
 	receiveIsBlocking = true;
 	blockingReceiveMessages = receivedMessages;
-	blockingReceiveMessageIds = messageIds;
+
 	blockingReceiveMessageIdCount = messageIdCount;
+
 	blockingReceiveReceivedMessageIdMap = CFAllocatorAllocate(kCFAllocatorDefault, messageIdCount * sizeof(bool), 0);
+	memset(blockingReceiveReceivedMessageIdMap, 0, messageIdCount * sizeof(bool));
+
+	blockingReceiveMessageIds = CFAllocatorAllocate(kCFAllocatorDefault, messageIdCount * sizeof(SInt32), 0);
+	memcpy(blockingReceiveMessageIds, messageIds, messageIdCount * sizeof(SInt32));
+
+	blockingReceiveCallbackableMessages = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kGERazerMessageArrayCallbacks);
 
 	CFRunLoopRunResult result = CFRunLoopRunInMode(kCFRunLoopDefaultMode, receiveTimeout, false);
 
 	receiveIsBlocking = false;
+
+	// We ensure we've fully cleaned up and finished with any static state before calling the
+	// callbacks, this is because the callbacks may call into this method again.
+
+	CFAllocatorDeallocate(kCFAllocatorDefault, blockingReceiveMessageIds);
+	blockingReceiveMessageIds = NULL;
+
 	CFAllocatorDeallocate(kCFAllocatorDefault, blockingReceiveReceivedMessageIdMap);
+	blockingReceiveReceivedMessageIdMap = NULL;
+
+	CFArrayRef callbackableMessages = blockingReceiveCallbackableMessages;
+	blockingReceiveCallbackableMessages = NULL;
+
+	CFIndex callbackableMessageCount = CFArrayGetCount(callbackableMessages);
+
+	for (CFIndex i = 0; i < callbackableMessageCount; i++)
+	{
+		const GERazerMessageRef message = (const GERazerMessageRef) CFArrayGetValueAtIndex(callbackableMessages, i);
+		GERazerDeviceManagerFireMessageReceivedCallbacks(message);
+	}
+
+	CFRelease(callbackableMessages);
 
 	return result == kCFRunLoopRunTimedOut ? kGERazerTransferTimedOut : kGERazerTransferSuccess;
 }
 
 void GERazerAddMessageReceivedCallback(SInt32 messageId, GERazerMessageReceivedCallback callback)
 {
-	CFMutableArrayRef messageCallbacks = GERazerDeviceManagerGetMessageReceivedCallbacks(messageId);
+	CFMutableArrayRef messageCallbacks = (CFMutableArrayRef) CFDictionaryGetValue(GERazerDeviceManagerGetMessageReceivedCallbacks(), (const void *) (CFIndex) messageId);
 
 	if (!messageCallbacks)
 	{
 		messageCallbacks = CFArrayCreateMutable(kCFAllocatorDefault, 0, NULL);
-		CFDictionaryAddValue(GERazerDeviceManagerMessageReceivedCallbacks(), (void *) (CFIndex) messageId, messageCallbacks);
+		CFDictionaryAddValue(GERazerDeviceManagerGetMessageReceivedCallbacks(), (const void *) (CFIndex) messageId, messageCallbacks);
+		CFRelease(messageCallbacks);
 	}
 
 	CFArrayAppendValue(messageCallbacks, callback);
@@ -353,7 +403,7 @@ void GERazerAddMessageReceivedCallback(SInt32 messageId, GERazerMessageReceivedC
 
 void GERazerRemoveMessageReceivedCallback(SInt32 messageId, GERazerMessageReceivedCallback callback)
 {
-	CFMutableArrayRef messageCallbacks = GERazerDeviceManagerGetMessageReceivedCallbacks(messageId);
+	CFMutableArrayRef messageCallbacks = (CFMutableArrayRef) CFDictionaryGetValue(GERazerDeviceManagerGetMessageReceivedCallbacks(), (const void *) (CFIndex) messageId);
 
 	if (messageCallbacks)
 	{

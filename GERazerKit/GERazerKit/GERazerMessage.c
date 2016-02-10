@@ -1,4 +1,5 @@
 #include "GERazerMessage.h"
+#include "GERazerUtils.h"
 
 struct GERazerMessage
 {
@@ -72,12 +73,12 @@ void GERazerMessageRelease(GERazerMessageRef message)
 	}
 }
 
-SInt32 GERazerMessageGetId(GERazerMessageRef message)
+SInt32 GERazerMessageGetId(const GERazerMessageRef message)
 {
 	return message->_id;
 }
 
-CFMutableDictionaryRef GERazerMessageGetData(GERazerMessageRef message)
+CFMutableDictionaryRef GERazerMessageGetData(const GERazerMessageRef message)
 {
 	return message->_data;
 }
@@ -154,7 +155,7 @@ CFPropertyListRef GERazerMessageDataDictionaryGetValue(CFDictionaryRef dictionar
 			{
 				return GERazerMessageDataArrayGetValue(value, argp);
 			}
-			else if (va_arg(argp, CFStringRef) == kGERazerTerminate)
+			else if (va_arg(argp, CFIndex) == kGERazerTerminate)
 			{
 				return value;
 			}
@@ -190,7 +191,7 @@ CFPropertyListRef GERazerMessageDataArrayGetValue(CFArrayRef array, va_list argp
 				{
 					return GERazerMessageDataArrayGetValue(value, argp);
 				}
-				else if (va_arg(argp, CFStringRef) == kGERazerTerminate)
+				else if (va_arg(argp, CFIndex) == kGERazerTerminate)
 				{
 					return value;
 				}
