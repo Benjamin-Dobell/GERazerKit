@@ -7,7 +7,7 @@ CFStringRef GERazerStringCreateFromInt(SInt32 value);
 
 //! Recursively merges @dictionary2's values into @mutableDictionary.
 //!
-//! IMPORTANT: All values (recursively) within @mutableDictionary must* be mutable.
+//! IMPORTANT: All values (recursively) within @mutableDictionary must be mutable.
 //!
 //! @dictionary2 will have its key-value pairs "set" on @mutableDictionary with the following two
 //! exceptions:
@@ -31,10 +31,6 @@ void GERazerDictionaryRecursivelyMergeDictionary(CFMutableDictionaryRef mutableD
 // These are macros instead of functions so that static analysis sees the CFRelease().
 //
 // NOTE: It is poor form to use these macros to release a reference stored in a variable!
-
-//! CFDictionarySetValue(@dictionary, @key, @value) then CFRelease(@value).
-//!
-//! Facilitates setting *temporary* created/copied (owned) values.
 
 #define GERazerDictionarySetThenReleaseValue(DICTIONARY, KEY, VALUE) \
 { \
