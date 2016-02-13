@@ -1,8 +1,10 @@
+#include <libkern/OSAtomic.h>
 #include "GERazerMessage.h"
 #include "GERazerUtils.h"
 
 struct GERazerMessage
 {
+	UInt32 _retainCount;
 	SInt32 _id;
 	CFMutableDictionaryRef _data;
 };
@@ -17,6 +19,7 @@ GERazerMessageRef GERazerMessageCreate(SInt32 messageId)
 
 		if (message->_data)
 		{
+			message->_retainCount = 1;
 			message->_id = messageId;
 		}
 		else
@@ -58,17 +61,30 @@ GERazerMessageRef GERazerMessageCreateCopy(GERazerMessageRef source)
 
 void GERazerMessageRetain(GERazerMessageRef message)
 {
-	CFRetain(message->_data);
+	UInt32 rc;
+	do {
+		rc = message->_retainCount;
+	} while (!OSAtomicCompareAndSwap32Barrier(rc, rc + 1, (int32_t *) &message->_retainCount));
 }
 
 void GERazerMessageRelease(GERazerMessageRef message)
 {
-	bool deallocate = CFGetRetainCount(message->_data) == 1;
+	bool deallocate = false;
 
-	CFRelease(message->_data);
+	UInt32 rc;
+	do {
+		rc = message->_retainCount;
+
+		if (rc == 1 && OSAtomicCompareAndSwap32Barrier(1, 0, (int32_t *) &message->_retainCount))
+		{
+			deallocate = true;
+			break;
+		}
+	} while (!OSAtomicCompareAndSwap32Barrier(rc, rc - 1, (int32_t *) &message->_retainCount));
 
 	if (deallocate)
 	{
+		CFRelease(message->_data);
 		CFAllocatorDeallocate(CFAllocatorGetDefault(), message);
 	}
 }
