@@ -36,9 +36,22 @@ extern CFArrayCallBacks kGERazerMessageArrayCallbacks;
 
 extern const CFIndex kGERazerTerminate;
 
+//! The first varg must be CFStringRef with all subsequent vargs being a CFStringRef or CFIndex and
+//! you *must* terminate the varg list with a kGERazerTerminate
+//! e.g.
+//! GERazerMessageDataDictionaryGetValue(profile, CFSTR("AllDevSettings"), CFSTR("Profiles"), 0, kGERazerTerminate);
+CFPropertyListRef GERazerMessageDataDictionaryGetValue(CFDictionaryRef dictionary, ...);
+
+//! The first varg must be CFIndex with all subsequent vargs being a CFStringRef or CFIndex and you
+//! *must* terminate the varg list with a kGERazerTerminate
+//! e.g.
+//! GERazerMessageDataArrayGetValue(profiles, 0, CFSTR("IsDeviceWired"), kGERazerTerminate);
+CFPropertyListRef GERazerMessageDataArrayGetValue(CFArrayRef array, ...);
+
 //! vargs must be CFStringRef or CFIndex (for looking into nested arrays) and you *must* terminate
-//! the varg list with a kGERazerTerminate e.g.
-//! GERazerMessageGetDataValue(message, CFSTR("AllDevSettings"), CFSTR("Profiles"), 0, kGERazerTerminate);
-CFPropertyListRef GERazerMessageGetDataValue(GERazerMessageRef message, ...);
+//! the varg list with a kGERazerTerminate
+//! e.g.
+//! GERazerMessageDataGetValue(message, CFSTR("AllDevSettings"), CFSTR("Profiles"), 0, kGERazerTerminate);
+CFPropertyListRef GERazerMessageDataGetValue(GERazerMessageRef message, ...);
 
 #endif /* ! __GERAZERKIT_GERAZERMESSAGE__ */

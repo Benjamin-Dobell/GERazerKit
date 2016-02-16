@@ -9,6 +9,25 @@
 #import <Foundation/Foundation.h>
 #import <GERazerKit/GERazerKit.h>
 
+CFStringRef profileName = CFSTR("GERazerKitDemo");
+
+CFMutableDictionaryRef getFirstProfileWithName(CFArrayRef profiles, CFStringRef name)
+{
+	CFIndex profileCount = CFArrayGetCount(profiles);
+
+	for (CFIndex i = 0; i < profileCount; i++)
+	{
+		CFStringRef profileName = GERazerMessageDataArrayGetValue(profiles, i, CFSTR("ProfileName"), kGERazerTerminate);
+
+		if (CFEqual(profileName, name))
+		{
+			return CFArrayGetValueAtIndex(profiles, i);
+		}
+	}
+
+	return NULL;
+}
+
 int main(int argc, const char *argv[])
 {
 	SInt32 connectStatus = GERazerConnect(NULL);
@@ -25,7 +44,7 @@ int main(int argc, const char *argv[])
 		return 1;
 	}
 
-	NSArray *attachedDevices = (__bridge_transfer NSArray *) GERazerCopyAttachedDeviceIds();
+	NSArray *attachedDevices = (__bridge_transfer NSArray *) GERazerCopyAttachedProductIds();
 
 	if ([attachedDevices count] == 0)
 	{
@@ -34,12 +53,53 @@ int main(int argc, const char *argv[])
 	}
 
 	SInt32 productId = [attachedDevices[0] intValue];
-	NSString *profileId = (__bridge_transfer NSString *) GERazerCopyActiveProfileId(productId);
+	NSString *activeProfileId = (__bridge_transfer NSString *) GERazerCopyActiveProfileId(productId);
 
-	if (!profileId)
+	if (!activeProfileId)
 	{
 		fprintf(stderr, "Unable to determine the active profile for product id = %d.\n", productId);
 		return 2;
+	}
+
+	CFArrayRef profiles = GERazerCopyProductProfiles(productId);
+
+	CFStringRef profileId = NULL;
+	CFMutableDictionaryRef profile = getFirstProfileWithName(profiles, profileName);
+
+	if (profile)
+	{
+		profileId = CFDictionaryGetValue(profile, CFSTR("ProfileID"));
+		CFRetain(profileId);
+	}
+	else if (CFArrayGetCount(profiles) > 0)
+	{
+		CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
+		profileId = CFUUIDCreateString(kCFAllocatorDefault, uuid);
+		CFRelease(uuid);
+
+		CFIndex activeProfileIndex = GERazerProfilesGetIndexForProfileId(profiles, (__bridge CFStringRef) activeProfileId);
+		CFDictionaryRef templateProfile = CFArrayGetValueAtIndex(profiles, activeProfileIndex);
+
+		profile = GERazerDictionaryCreateMutableDeepCopy(templateProfile);
+		CFDictionarySetValue(profile, CFSTR("ProfileName"), profileName);
+		CFDictionarySetValue(profile, CFSTR("ProfileID"), profileId);
+
+		GERazerSaveProductProfile(productId, profile);
+
+		CFRelease(profile);
+	}
+
+	CFRelease(profiles);
+
+	if (!profileId)
+	{
+		fprintf(stderr, "Uh-oh! This demo isn't clever enough to create a profile from scratch.\nAt least one profile must exist so we can clone it.\n");
+		return 2;
+	}
+
+	if (!CFEqual((__bridge CFStringRef) activeProfileId, profileId))
+	{
+		GERazerActivateProductProfile(productId, profileId);
 	}
 
 	SInt32 followingProductId = GERazerGetLedFollowingProductId(productId);
@@ -83,20 +143,10 @@ int main(int argc, const char *argv[])
 		GERazerDictionaryRecursivelyMergeThenReleaseDictionary(deviceSettings, GERazerDeviceSettingsCreateWithLedFollowingProduct(followingProductId, false));
 	}
 
-	GERazerMessageRef deviceSettingsMessage = GERazerMessageCreateAssignDeviceSettingsRequest(productId, (__bridge CFStringRef) profileId, deviceSettings);
+	GERazerSetProductDeviceSettings(productId, profileId, deviceSettings);
 
 	CFRelease(deviceSettings);
-
-	GERazerSendMessage(deviceSettingsMessage);
-	GERazerMessageRelease(deviceSettingsMessage);
-
-	GERazerMessageRef receivedMessage;
-	GERazerReceiveMessage(kGERazerMessageIdReturnDictionary, &receivedMessage, 1.0);
-
-	if (receivedMessage)
-	{
-		GERazerMessageRelease(receivedMessage);
-	}
+	CFRelease(profileId);
 
 	printf("Done\n");
 

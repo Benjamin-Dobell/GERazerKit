@@ -5,39 +5,69 @@
 //! Nevertheless, if the key is not included response messages are messed up.
 const CFStringRef kGERazerResponseMsgPortNameDefault = CFSTR("MambaRGBConfiguratorReplyPort");
 
-GERazerMessageRef GERazerMessageCreateAttachedDevicesRequest(void)
+GERazerMessageRef GERazerMessageCreateRetrieveAttachedDevices(void)
 {
-	GERazerMessageRef message = GERazerMessageCreate(kGERazerMessageIdAttachedDevices);
+	GERazerMessageRef message = GERazerMessageCreate(kGERazerMessageIdAttachedProducts);
 	CFDictionaryAddValue(GERazerMessageGetData(message), CFSTR("ResponseMsgPortName"), kGERazerResponseMsgPortNameDefault);
 	return message;
 }
 
-GERazerMessageRef GERazerMessageCreateAllSettingsRequest(SInt32 productId)
+GERazerMessageRef GERazerMessageCreateRetrieveProductAllSettings(SInt32 productId)
 {
-	CFNumberRef boxedProductId = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &productId);
-
-	GERazerMessageRef message = GERazerMessageCreate(kGERazerMessageIdDeviceAllSettings);
-	CFDictionaryAddValue(GERazerMessageGetData(message), CFSTR("ProductID"), boxedProductId);
-	CFDictionaryAddValue(GERazerMessageGetData(message), CFSTR("ResponseMsgPortName"), kGERazerResponseMsgPortNameDefault);
-
-	CFRelease(boxedProductId);
-
-	return message;
-}
-
-GERazerMessageRef GERazerMessageCreateAssignDeviceSettingsRequest(SInt32 productId, CFStringRef profileId, CFDictionaryRef deviceSettings)
-{
-	CFNumberRef boxedProductId = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &productId);
-
-	GERazerMessageRef message = GERazerMessageCreate(kGERazerMessageIdAssignDeviceSettings);
+	GERazerMessageRef message = GERazerMessageCreate(kGERazerMessageIdProductAllSettings);
 	CFMutableDictionaryRef messageDictionary = GERazerMessageGetData(message);
 
-	CFDictionarySetValue(messageDictionary, CFSTR("ProductID"), boxedProductId);
-	CFDictionarySetValue(messageDictionary, CFSTR("ProfileID"), profileId);
-	CFDictionarySetValue(messageDictionary, CFSTR("ResponseMsgPortName"), kGERazerResponseMsgPortNameDefault);
-	GERazerDictionarySetThenReleaseValue(messageDictionary, CFSTR("DeviceSettingsDictionary"), CFPropertyListCreateDeepCopy(kCFAllocatorDefault, deviceSettings, kCFPropertyListMutableContainersAndLeaves));
+	GERazerDictionarySetThenReleaseValue(messageDictionary, CFSTR("ProductID"), CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &productId));
+	CFDictionaryAddValue(messageDictionary, CFSTR("ResponseMsgPortName"), kGERazerResponseMsgPortNameDefault);
 
-	CFRelease(boxedProductId);
+	return message;
+}
+
+GERazerMessageRef GERazerMessageCreateActivateProductProfile(SInt32 productId, CFStringRef profileId)
+{
+	GERazerMessageRef message = GERazerMessageCreate(kGERazerMessageIdProductActivateProfile);
+	CFMutableDictionaryRef messageDictionary = GERazerMessageGetData(message);
+
+	GERazerDictionarySetThenReleaseValue(messageDictionary, CFSTR("ProductID"), CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &productId));
+	GERazerDictionarySetThenReleaseValue(messageDictionary, CFSTR("ProfileID"), CFStringCreateCopy(kCFAllocatorDefault, profileId));
+	CFDictionarySetValue(messageDictionary, CFSTR("ResponseMsgPortName"), kGERazerResponseMsgPortNameDefault);
+
+	return message;
+}
+
+GERazerMessageRef GERazerMessageCreateSaveAndActivateProductProfile(SInt32 productId, CFDictionaryRef profile)
+{
+	GERazerMessageRef message = GERazerMessageCreate(kGERazerMessageIdProductSaveAndActivateProfile);
+	CFMutableDictionaryRef messageDictionary = GERazerMessageGetData(message);
+
+	GERazerDictionarySetThenReleaseValue(messageDictionary, CFSTR("ProductID"), CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &productId));
+	GERazerDictionarySetThenReleaseValue(messageDictionary, CFSTR("DeviceSettingsDictionary"), GERazerDictionaryCreateMutableDeepCopy(profile));
+	CFDictionarySetValue(messageDictionary, CFSTR("ResponseMsgPortName"), kGERazerResponseMsgPortNameDefault);
+
+	return message;
+}
+
+GERazerMessageRef GERazerMessageCreateDeleteProductProfile(SInt32 productId, CFStringRef profileId)
+{
+	GERazerMessageRef message = GERazerMessageCreate(kGERazerMessageIdProductDeleteProfile);
+	CFMutableDictionaryRef messageDictionary = GERazerMessageGetData(message);
+
+	GERazerDictionarySetThenReleaseValue(messageDictionary, CFSTR("ProductID"), CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &productId));
+	GERazerDictionarySetThenReleaseValue(messageDictionary, CFSTR("ProfileID"), CFStringCreateCopy(kCFAllocatorDefault, profileId));
+	CFDictionarySetValue(messageDictionary, CFSTR("ResponseMsgPortName"), kGERazerResponseMsgPortNameDefault);
+
+	return message;
+}
+
+GERazerMessageRef GERazerMessageCreateAssignProductDeviceSettings(SInt32 productId, CFStringRef profileId, CFDictionaryRef deviceSettings)
+{
+	GERazerMessageRef message = GERazerMessageCreate(kGERazerMessageIdProductAssignDeviceSettings);
+	CFMutableDictionaryRef messageDictionary = GERazerMessageGetData(message);
+
+	GERazerDictionarySetThenReleaseValue(messageDictionary, CFSTR("ProductID"), CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &productId));
+	GERazerDictionarySetThenReleaseValue(messageDictionary, CFSTR("ProfileID"), CFStringCreateCopy(kCFAllocatorDefault, profileId));
+	CFDictionarySetValue(messageDictionary, CFSTR("ResponseMsgPortName"), kGERazerResponseMsgPortNameDefault);
+	GERazerDictionarySetThenReleaseValue(messageDictionary, CFSTR("DeviceSettingsDictionary"), GERazerDictionaryCreateMutableDeepCopy(deviceSettings));
 
 	return message;
 }
@@ -48,15 +78,9 @@ CFMutableDictionaryRef GERazerDeviceSettingsCreateWithLedFollowingProduct(SInt32
 
 	char enabled = followingEnabled ? (char) 1 : (char) 0;
 
-	CFNumberRef boxedProductId = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &productId);
-	CFNumberRef boxedEnabled = CFNumberCreate(kCFAllocatorDefault, kCFNumberCharType, &enabled);
-
 	CFMutableDictionaryRef ledChromaFollowDictionary = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-	CFDictionarySetValue(ledChromaFollowDictionary, CFSTR("PID"), boxedProductId);
-	CFDictionarySetValue(ledChromaFollowDictionary, CFSTR("Enabled"), boxedEnabled);
-
-	CFRelease(boxedProductId);
-	CFRelease(boxedEnabled);
+	GERazerDictionarySetThenReleaseValue(ledChromaFollowDictionary, CFSTR("PID"), CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &productId));
+	GERazerDictionarySetThenReleaseValue(ledChromaFollowDictionary, CFSTR("Enabled"), CFNumberCreate(kCFAllocatorDefault, kCFNumberCharType, &enabled));
 
 	// Device settings dictionary
 
@@ -71,7 +95,7 @@ CFMutableDictionaryRef GERazerDeviceSettingsCreateWithLedFollowingProduct(SInt32
 CFMutableDictionaryRef GERazerDeviceSettingsCreateWithLedEffectList(CFDictionaryRef ledEffectList)
 {
 	CFMutableDictionaryRef deviceSettingsDictionary = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-	GERazerDictionarySetThenReleaseValue(deviceSettingsDictionary, CFSTR("LEDEffectList"), CFPropertyListCreateDeepCopy(kCFAllocatorDefault, ledEffectList, kCFPropertyListMutableContainersAndLeaves));
+	GERazerDictionarySetThenReleaseValue(deviceSettingsDictionary, CFSTR("LEDEffectList"), GERazerDictionaryCreateMutableDeepCopy(ledEffectList));
 	return deviceSettingsDictionary;
 }
 
@@ -81,18 +105,10 @@ CFMutableDictionaryRef GERazerDeviceSettingsCreateWithEnabledLightingEffect(SInt
 
 	// Led lighting dictionary
 
-	CFNumberRef boxedLedId = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &ledId);
-	CFNumberRef boxedEffectId = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &effectId);
-	CFNumberRef boxedEnabled = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &enabled);
-
 	CFMutableDictionaryRef ledLightingDictionary = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-	CFDictionarySetValue(ledLightingDictionary, CFSTR("LEDID"), boxedLedId);
-	CFDictionarySetValue(ledLightingDictionary, CFSTR("Effect"), boxedEffectId);
-	CFDictionarySetValue(ledLightingDictionary, CFSTR("Enabled"), boxedEnabled);
-
-	CFRelease(boxedLedId);
-	CFRelease(boxedEffectId);
-	CFRelease(boxedEnabled);
+	GERazerDictionarySetThenReleaseValue(ledLightingDictionary, CFSTR("LEDID"), CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &ledId));
+	GERazerDictionarySetThenReleaseValue(ledLightingDictionary, CFSTR("Effect"), CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &effectId));
+	GERazerDictionarySetThenReleaseValue(ledLightingDictionary, CFSTR("Enabled"), CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &enabled));
 
 	// Lighting array
 

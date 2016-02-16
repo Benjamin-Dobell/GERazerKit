@@ -1,18 +1,35 @@
 #include "GERazerStandardBehavior.h"
 #include "GERazerIPC.h"
 #include "GERazerStandardMessages.h"
-#include "GERazerKit.h"
+#include "GERazerUtils.h"
 
 CFTimeInterval kGERazerStandardBehaviourReceiveTimeout = 1.0;
 
-CFArrayRef GERazerCopyAttachedDeviceIds(void)
+CFIndex GERazerProfilesGetIndexForProfileId(CFArrayRef profiles, CFStringRef profileId)
 {
-	GERazerMessageRef message = GERazerMessageCreateAttachedDevicesRequest();
+	CFIndex profileCount = CFArrayGetCount(profiles);
+
+	for (CFIndex i = 0; i < profileCount; i++)
+	{
+		CFStringRef id = GERazerMessageDataArrayGetValue(profiles, i, CFSTR("ProfileID"), kGERazerTerminate);
+
+		if (CFEqual(profileId, id))
+		{
+			return i;
+		}
+	}
+
+	return kCFNotFound;
+}
+
+CFArrayRef GERazerCopyAttachedProductIds(void)
+{
+	GERazerMessageRef message = GERazerMessageCreateRetrieveAttachedDevices();
 	GERazerSendMessage(message);
 	GERazerMessageRelease(message);
 
 	GERazerMessageRef responseMessage;
-	GERazerReceiveMessage(kGERazerMessageIdAttachedDevices, &responseMessage, kGERazerStandardBehaviourReceiveTimeout);
+	GERazerReceiveMessage(kGERazerMessageIdAttachedProducts, &responseMessage, kGERazerStandardBehaviourReceiveTimeout);
 
 	CFArrayRef productIds = NULL;
 
@@ -33,18 +50,18 @@ CFArrayRef GERazerCopyAttachedDeviceIds(void)
 
 CFStringRef GERazerCopyActiveProfileId(SInt32 productId)
 {
-	GERazerMessageRef message = GERazerMessageCreateAllSettingsRequest(productId);
+	GERazerMessageRef message = GERazerMessageCreateRetrieveProductAllSettings(productId);
 	GERazerSendMessage(message);
 	GERazerMessageRelease(message);
 
 	GERazerMessageRef responseMessage;
-	GERazerReceiveMessage(kGERazerMessageIdDeviceAllSettings, &responseMessage, kGERazerStandardBehaviourReceiveTimeout);
+	GERazerReceiveMessage(kGERazerMessageIdProductAllSettings, &responseMessage, kGERazerStandardBehaviourReceiveTimeout);
 
 	CFStringRef profileId = NULL;
 
 	if (responseMessage)
 	{
-		profileId = GERazerMessageGetDataValue(responseMessage, CFSTR("AllDevSettings"), CFSTR("DeviceSettings"), CFSTR("ActiveProfile"), kGERazerTerminate);
+		profileId = GERazerMessageDataGetValue(responseMessage, CFSTR("AllDevSettings"), CFSTR("DeviceSettings"), CFSTR("ActiveProfile"), kGERazerTerminate);
 
 		if (profileId)
 		{
@@ -57,20 +74,83 @@ CFStringRef GERazerCopyActiveProfileId(SInt32 productId)
 	return profileId;
 }
 
-SInt32 GERazerGetLedFollowingProductId(SInt32 productId)
+CFMutableArrayRef GERazerCopyProductProfiles(SInt32 productId)
 {
-	GERazerMessageRef message = GERazerMessageCreateAllSettingsRequest(productId);
+	GERazerMessageRef message = GERazerMessageCreateRetrieveProductAllSettings(productId);
 	GERazerSendMessage(message);
 	GERazerMessageRelease(message);
 
 	GERazerMessageRef responseMessage;
-	GERazerReceiveMessage(kGERazerMessageIdDeviceAllSettings, &responseMessage, kGERazerStandardBehaviourReceiveTimeout);
+	GERazerReceiveMessage(kGERazerMessageIdProductAllSettings, &responseMessage, kGERazerStandardBehaviourReceiveTimeout);
+
+	CFMutableArrayRef profiles = NULL;
+
+	if (responseMessage)
+	{
+		CFArrayRef productProfiles = GERazerMessageDataGetValue(responseMessage, CFSTR("AllDevSettings"), CFSTR("Profiles"), kGERazerTerminate);
+		profiles = GERazerArrayCreateMutableDeepCopy(productProfiles);
+
+		GERazerMessageRelease(responseMessage);
+	}
+
+	return profiles;
+}
+
+bool GERazerSaveProductProfile(SInt32 productId, CFDictionaryRef profile)
+{
+	CFStringRef activeProfileId = GERazerCopyActiveProfileId(productId);
+
+	GERazerMessageRef message = GERazerMessageCreateSaveAndActivateProductProfile(productId, profile);
+	SInt32 result = GERazerSendMessage(message);
+	GERazerMessageRelease(message);
+
+	if (result != kGERazerTransferSuccess)
+	{
+		return false;
+	}
+
+	if (activeProfileId && !CFEqual(CFDictionaryGetValue(profile, CFSTR("ProfileID")), activeProfileId))
+	{
+		return GERazerActivateProductProfile(productId, activeProfileId);
+	}
+	else
+	{
+		return true;
+	}
+}
+
+bool GERazerActivateProductProfile(SInt32 productId, CFStringRef profileId)
+{
+	GERazerMessageRef message = GERazerMessageCreateActivateProductProfile(productId, profileId);
+	GERazerSendMessage(message);
+	GERazerMessageRelease(message);
+
+	return true;
+}
+
+bool GERazerDeleteProductProfile(SInt32 productId, CFStringRef profileId)
+{
+	GERazerMessageRef message = GERazerMessageCreateDeleteProductProfile(productId, profileId);
+	SInt32 result = GERazerSendMessage(message);
+	GERazerMessageRelease(message);
+
+	return result == kGERazerTransferSuccess;
+}
+
+SInt32 GERazerGetLedFollowingProductId(SInt32 productId)
+{
+	GERazerMessageRef message = GERazerMessageCreateRetrieveProductAllSettings(productId);
+	GERazerSendMessage(message);
+	GERazerMessageRelease(message);
+
+	GERazerMessageRef responseMessage;
+	GERazerReceiveMessage(kGERazerMessageIdProductAllSettings, &responseMessage, kGERazerStandardBehaviourReceiveTimeout);
 
 	SInt32 followingProductId = kGERazerProductIdNone;
 
 	if (responseMessage)
 	{
-		CFNumberRef boxedFollowingProductId = GERazerMessageGetDataValue(responseMessage, CFSTR("AllDevSettings"), CFSTR("Profiles"), 0, CFSTR("LEDChromaFollow"), CFSTR("PID"), kGERazerTerminate);
+		CFNumberRef boxedFollowingProductId = GERazerMessageDataGetValue(responseMessage, CFSTR("AllDevSettings"), CFSTR("Profiles"), 0, CFSTR("LEDChromaFollow"), CFSTR("PID"), kGERazerTerminate);
 
 		if (boxedFollowingProductId)
 		{
@@ -81,4 +161,25 @@ SInt32 GERazerGetLedFollowingProductId(SInt32 productId)
 	}
 
 	return followingProductId;
+}
+
+bool GERazerSetProductDeviceSettings(SInt32 productId, CFStringRef profileId, CFDictionaryRef deviceSettings)
+{
+	GERazerMessageRef message = GERazerMessageCreateAssignProductDeviceSettings(productId, profileId, deviceSettings);
+	GERazerSendMessage(message);
+	GERazerMessageRelease(message);
+
+	GERazerMessageRef responseMessage;
+	GERazerReceiveMessage(kGERazerMessageIdProductReturnDictionary, &responseMessage, 1.0);
+
+	if (responseMessage)
+	{
+		GERazerMessageRelease(responseMessage);
+	}
+	else
+	{
+		return false;
+	}
+
+	return true;
 }

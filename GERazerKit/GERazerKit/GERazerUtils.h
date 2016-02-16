@@ -26,6 +26,18 @@ CFStringRef GERazerStringCreateFromInt(SInt32 value);
 //! kCFPropertyListMutableContainersAndLeaves.
 void GERazerDictionaryRecursivelyMergeDictionary(CFMutableDictionaryRef mutableDictionary, CFDictionaryRef dictionary2);
 
+// A convenience method for the common case
+static inline CFMutableDictionaryRef GERazerDictionaryCreateMutableDeepCopy(CFDictionaryRef dictionary)
+{
+	return (CFMutableDictionaryRef) CFPropertyListCreateDeepCopy(kCFAllocatorDefault, dictionary, kCFPropertyListMutableContainersAndLeaves);
+}
+
+// A convenience method for the common case
+static inline CFMutableArrayRef GERazerArrayCreateMutableDeepCopy(CFArrayRef array)
+{
+	return (CFMutableArrayRef) CFPropertyListCreateDeepCopy(kCFAllocatorDefault, array, kCFPropertyListMutableContainersAndLeaves);
+}
+
 // Macros to facilitate working with temporary owned objects.
 //
 // These are macros instead of functions so that static analysis sees the CFRelease().

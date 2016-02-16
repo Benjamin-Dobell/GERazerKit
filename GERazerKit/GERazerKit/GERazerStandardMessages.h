@@ -5,26 +5,38 @@
 
 CF_ENUM(SInt32)
 {
-	kGERazerMessageIdDeviceAllSettings = 4,
-	kGERazerMessageIdAssignDeviceSettings = 6,
-	kGERazerMessageIdDeviceFirmwareVersion = 14,
-	kGERazerMessageIdDeviceBatteryPercentage = 15,
-	kGERazerMessageIdDeviceChargingStatus = 16,
-	kGERazerMessageIdAttachedDevices = 56,
-	kGERazerMessageIdReturnDictionary = 58, // Typical response to kGERazerMessageIdAssignDeviceSettings
-	kGERazerMessageIdDeviceBasicInfo = 68,
-	kGERazerMessageIdDeviceConnected = 69,
-	kGERazerMessageIdDeviceSurfaceCalibration = 74,
-	kGERazerMessageIdDeviceSerialNumber = 82
+	kGERazerMessageIdProductAllSettings = 4,
+	kGERazerMessageIdProductSaveAndActivateProfile = 5,
+	kGERazerMessageIdProductAssignDeviceSettings = 6,
+	kGERazerMessageIdProductDeleteProfile = 9,
+	kGERazerMessageIdProductActivateProfile = 10,
+	kGERazerMessageIdProductFirmwareVersion = 14,
+	kGERazerMessageIdProductBatteryPercentage = 15,
+	kGERazerMessageIdProductChargingStatus = 16,
+	kGERazerMessageIdAttachedProducts = 56,
+	kGERazerMessageIdProductReturnDictionary = 58, // Response to kGERazerMessageIdProductSaveAndActivateProfile and kGERazerMessageIdProductAssignDeviceSettings
+	kGERazerMessageIdProductBasicInfo = 68,
+	kGERazerMessageIdProductConnected = 69,
+	kGERazerMessageIdProductSurfaceCalibration = 74,
+	kGERazerMessageIdProductSerialNumber = 82,
+	kGERazerMessageIdProductRgbLayers = 94
 };
 
 extern const CFStringRef kGERazerResponseMsgPortNameDefault;
 
-GERazerMessageRef GERazerMessageCreateAttachedDevicesRequest(void);
+GERazerMessageRef GERazerMessageCreateRetrieveAttachedDevices(void);
 
-GERazerMessageRef GERazerMessageCreateAllSettingsRequest(SInt32 productId);
+GERazerMessageRef GERazerMessageCreateRetrieveProductAllSettings(SInt32 productId);
 
-GERazerMessageRef GERazerMessageCreateAssignDeviceSettingsRequest(SInt32 productId, CFStringRef profileId, CFDictionaryRef deviceSettings);
+GERazerMessageRef GERazerMessageCreateActivateProductProfile(SInt32 productId, CFStringRef profileId);
+
+GERazerMessageRef GERazerMessageCreateSaveAndActivateProductProfile(SInt32 productId, CFDictionaryRef profile);
+
+GERazerMessageRef GERazerMessageCreateDeleteProductProfile(SInt32 productId, CFStringRef profileId);
+
+// Note: It seems like a Device Manager bug, but the specified a profileId will always be made
+//       active - in effect making this message no different than GERazerMessageCreateSaveAndActivateProductProfile().
+GERazerMessageRef GERazerMessageCreateAssignProductDeviceSettings(SInt32 productId, CFStringRef profileId, CFDictionaryRef deviceSettings);
 
 CFMutableDictionaryRef GERazerDeviceSettingsCreateWithLedFollowingProduct(SInt32 productId, bool followingEnabled);
 

@@ -32,13 +32,13 @@ void GERazerDictionaryRecursivelyMergeDictionary(CFMutableDictionaryRef mutableD
 		}
 		else if (typeIdsMatch && value1TypeId == arrayTypeId)
 		{
-			CFArrayRef copiedValue2Array = CFPropertyListCreateDeepCopy(kCFAllocatorDefault, value2, kCFPropertyListMutableContainersAndLeaves);
+			CFArrayRef copiedValue2Array = GERazerArrayCreateMutableDeepCopy(value2);
 			CFArrayAppendArray((CFMutableArrayRef) value1, copiedValue2Array, CFRangeMake(0, CFArrayGetCount(copiedValue2Array)));
 			CFRelease(copiedValue2Array);
 		}
 		else
 		{
-			CFPropertyListRef copiedValue2 = CFPropertyListCreateDeepCopy(kCFAllocatorDefault, value2, kCFPropertyListMutableContainersAndLeaves);
+			CFPropertyListRef copiedValue2 = GERazerDictionaryCreateMutableDeepCopy(value2);
 			CFDictionarySetValue(mutableDictionary, key, copiedValue2);
 			CFRelease(copiedValue2);
 		}

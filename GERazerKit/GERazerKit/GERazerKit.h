@@ -22,9 +22,4 @@ extern double GERazerKitVersionNumber;
 //! Project version string for GERazerKit.
 extern const unsigned char GERazerKitVersionString[];
 
-CF_ENUM(SInt32)
-{
-	kGERazerProductIdNone = -1
-};
-
 #endif /* ! __GERAZERKIT_GERAZERKIT__ */

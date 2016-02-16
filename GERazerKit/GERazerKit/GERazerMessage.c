@@ -38,10 +38,11 @@ GERazerMessageRef GERazerMessageCreateWithDictionary(SInt32 messageId, CFDiction
 
 	if (message)
 	{
-		message->_data = (CFMutableDictionaryRef)CFPropertyListCreateDeepCopy(kCFAllocatorDefault, dictionary, kCFPropertyListMutableContainersAndLeaves);
+		message->_data = GERazerDictionaryCreateMutableDeepCopy(dictionary);
 
 		if (message->_data)
 		{
+			message->_retainCount = 1;
 			message->_id = messageId;
 		}
 		else
@@ -145,9 +146,9 @@ const CFIndex kGERazerTerminate = LLONG_MIN;
 const CFIndex kGERazerTerminate = LONG_MIN;
 #endif
 
-CFPropertyListRef GERazerMessageDataArrayGetValue(CFArrayRef array, va_list argp);
+CFPropertyListRef GERazerMessageDataArrayVGetValue(CFArrayRef array, va_list argp);
 
-CFPropertyListRef GERazerMessageDataDictionaryGetValue(CFDictionaryRef dictionary, va_list argp)
+CFPropertyListRef GERazerMessageDataDictionaryVGetValue(CFDictionaryRef dictionary, va_list argp)
 {
 	CFStringRef key = va_arg(argp, CFStringRef);
 
@@ -165,11 +166,11 @@ CFPropertyListRef GERazerMessageDataDictionaryGetValue(CFDictionaryRef dictionar
 
 			if (typeID == CFDictionaryGetTypeID())
 			{
-				return GERazerMessageDataDictionaryGetValue(value, argp);
+				return GERazerMessageDataDictionaryVGetValue(value, argp);
 			}
 			else if (typeID == CFArrayGetTypeID())
 			{
-				return GERazerMessageDataArrayGetValue(value, argp);
+				return GERazerMessageDataArrayVGetValue(value, argp);
 			}
 			else if (va_arg(argp, CFIndex) == kGERazerTerminate)
 			{
@@ -181,7 +182,7 @@ CFPropertyListRef GERazerMessageDataDictionaryGetValue(CFDictionaryRef dictionar
 	return NULL;
 }
 
-CFPropertyListRef GERazerMessageDataArrayGetValue(CFArrayRef array, va_list argp)
+CFPropertyListRef GERazerMessageDataArrayVGetValue(CFArrayRef array, va_list argp)
 {
 	CFIndex index = va_arg(argp, CFIndex);
 
@@ -201,11 +202,11 @@ CFPropertyListRef GERazerMessageDataArrayGetValue(CFArrayRef array, va_list argp
 
 				if (typeID == CFDictionaryGetTypeID())
 				{
-					return GERazerMessageDataDictionaryGetValue(value, argp);
+					return GERazerMessageDataDictionaryVGetValue(value, argp);
 				}
 				else if (typeID == CFArrayGetTypeID())
 				{
-					return GERazerMessageDataArrayGetValue(value, argp);
+					return GERazerMessageDataArrayVGetValue(value, argp);
 				}
 				else if (va_arg(argp, CFIndex) == kGERazerTerminate)
 				{
@@ -218,14 +219,42 @@ CFPropertyListRef GERazerMessageDataArrayGetValue(CFArrayRef array, va_list argp
 	return NULL;
 }
 
-CFPropertyListRef GERazerMessageGetDataValue(GERazerMessageRef message, ...)
+CFPropertyListRef GERazerMessageDataDictionaryGetValue(CFDictionaryRef dictionary, ...)
+{
+	CFPropertyListRef result = NULL;
+
+	va_list argp;
+	va_start(argp, dictionary);
+
+	result = GERazerMessageDataDictionaryVGetValue(dictionary, argp);
+
+	va_end(argp);
+
+	return result;
+}
+
+CFPropertyListRef GERazerMessageDataArrayGetValue(CFArrayRef array, ...)
+{
+	CFPropertyListRef result = NULL;
+
+	va_list argp;
+	va_start(argp, array);
+
+	result = GERazerMessageDataArrayVGetValue(array, argp);
+
+	va_end(argp);
+
+	return result;
+}
+
+CFPropertyListRef GERazerMessageDataGetValue(GERazerMessageRef message, ...)
 {
 	CFPropertyListRef result = NULL;
 
 	va_list argp;
 	va_start(argp, message);
 
-	result = GERazerMessageDataDictionaryGetValue(GERazerMessageGetData(message), argp);
+	result = GERazerMessageDataDictionaryVGetValue(GERazerMessageGetData(message), argp);
 
 	va_end(argp);
 
