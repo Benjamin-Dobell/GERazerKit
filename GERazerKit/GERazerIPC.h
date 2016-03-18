@@ -8,7 +8,7 @@ CF_ENUM(SInt32)
 {
 	kGERazerConnectionSuccess = 0,
 	kGERazerConnectionFailed = 1, // The Razer Device Manager is presumably not running
-	kGERazerConnectionSendOnly = 2 // We can only send and not receive because Razer Synapse is running.
+	kGERazerConnectionSendOnly = 2 // We can only send and not receive because Razer Synapse (or a GERazerKit-based process) is running.
 };
 
 CF_ENUM(SInt32)

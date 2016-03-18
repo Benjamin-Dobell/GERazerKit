@@ -98,7 +98,7 @@ CFMutableArrayRef GERazerCopyProductProfiles(SInt32 productId)
 
 bool GERazerSaveProductProfile(SInt32 productId, CFDictionaryRef profile)
 {
-	CFStringRef activeProfileId = GERazerCopyActiveProfileId(productId);
+	CFStringRef originalActiveProfileId = GERazerCopyActiveProfileId(productId);
 
 	GERazerMessageRef message = GERazerMessageCreateSaveAndActivateProductProfile(productId, profile);
 	SInt32 result = GERazerSendMessage(message);
@@ -106,13 +106,17 @@ bool GERazerSaveProductProfile(SInt32 productId, CFDictionaryRef profile)
 
 	bool success = result == kGERazerTransferSuccess;
 
-	if (success && activeProfileId && !CFEqual(CFDictionaryGetValue(profile, CFSTR("ProfileID")), activeProfileId))
+	if (originalActiveProfileId)
 	{
-		success = GERazerActivateProductProfile(productId, activeProfileId);
+		if (success && !CFEqual(CFDictionaryGetValue(profile, CFSTR("ProfileID")), originalActiveProfileId))
+		{
+			success = GERazerActivateProductProfile(productId, originalActiveProfileId);
+		}
+
+		CFRelease(originalActiveProfileId);
 	}
 
-  CFRelease(activeProfileId);
-  return success;
+	return success;
 }
 
 bool GERazerActivateProductProfile(SInt32 productId, CFStringRef profileId)

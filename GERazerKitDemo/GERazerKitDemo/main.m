@@ -21,7 +21,7 @@ CFMutableDictionaryRef getFirstProfileWithName(CFArrayRef profiles, CFStringRef 
 
 		if (CFEqual(profileName, name))
 		{
-			return CFArrayGetValueAtIndex(profiles, i);
+			return (CFMutableDictionaryRef) CFArrayGetValueAtIndex(profiles, i);
 		}
 	}
 
@@ -113,7 +113,7 @@ int main(int argc, const char *argv[])
 
 	CFMutableDictionaryRef mouseEffects = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 	GERazerDictionarySetThenReleaseValue(mouseEffects, kGERazerEffectNameSpectrumCycling, GERazerEffectCreateSpectrumCycling());
-	GERazerDictionarySetThenReleaseValue(mouseEffects, kGERazerEffectNameBreathing, GERazerEffectCreateSpectrumCycling());
+	GERazerDictionarySetThenReleaseValue(mouseEffects, kGERazerEffectNameBreathing, GERazerEffectCreateBreathing(0.0, 1.0, 0.0, 1.0, 1.0, 1.0));
 	GERazerDictionarySetThenReleaseValue(mouseEffects, kGERazerEffectNameWave, GERazerEffectCreateWave(kGERazerWaveDirectionBackToFront));
 	GERazerDictionarySetThenReleaseValue(mouseEffects, kGERazerEffectNameStatic, GERazerEffectCreateStatic(1.0, 1.0, 0.0));
 	GERazerDictionarySetThenReleaseValue(mouseEffects, kGERazerEffectNameReactive, GERazerEffectCreateReactive(0.0, 1.0, 0.0, kGERazerReactiveAfterglowDurationShort));

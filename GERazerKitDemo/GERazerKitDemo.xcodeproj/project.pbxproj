@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B55FBD191C67C917009634D0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B55FBD181C67C917009634D0 /* main.m */; };
+		B532D7B91C9C6BB000ADE908 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B532D7B81C9C6BB000ADE908 /* main.m */; };
 		B55FBD261C67C97C009634D0 /* GERazerKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B55FBD251C67C97C009634D0 /* GERazerKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -24,8 +24,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		B55FBD151C67C917009634D0 /* chroma */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = chroma; sourceTree = BUILT_PRODUCTS_DIR; };
-		B55FBD181C67C917009634D0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		B532D7B81C9C6BB000ADE908 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = GERazerKitDemo/main.m; sourceTree = SOURCE_ROOT; };
+		B55FBD151C67C917009634D0 /* GERazerKitDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = GERazerKitDemo; sourceTree = BUILT_PRODUCTS_DIR; };
 		B55FBD251C67C97C009634D0 /* GERazerKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GERazerKit.framework; path = ../GERazerKit/build/Debug/GERazerKit.framework; sourceTree = "<group>"; };
 		B55FBD271C68FA0F009634D0 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -47,7 +47,7 @@
 			children = (
 				B55FBD271C68FA0F009634D0 /* Cocoa.framework */,
 				B55FBD251C67C97C009634D0 /* GERazerKit.framework */,
-				B55FBD171C67C917009634D0 /* chroma */,
+				B55FBD171C67C917009634D0 /* GERazerKitDemo */,
 				B55FBD161C67C917009634D0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -55,25 +55,26 @@
 		B55FBD161C67C917009634D0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B55FBD151C67C917009634D0 /* chroma */,
+				B55FBD151C67C917009634D0 /* GERazerKitDemo */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B55FBD171C67C917009634D0 /* chroma */ = {
+		B55FBD171C67C917009634D0 /* GERazerKitDemo */ = {
 			isa = PBXGroup;
 			children = (
-				B55FBD181C67C917009634D0 /* main.m */,
+				B532D7B81C9C6BB000ADE908 /* main.m */,
 			);
+			name = GERazerKitDemo;
 			path = chroma;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B55FBD141C67C917009634D0 /* chroma */ = {
+		B55FBD141C67C917009634D0 /* GERazerKitDemo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B55FBD1C1C67C917009634D0 /* Build configuration list for PBXNativeTarget "chroma" */;
+			buildConfigurationList = B55FBD1C1C67C917009634D0 /* Build configuration list for PBXNativeTarget "GERazerKitDemo" */;
 			buildPhases = (
 				B55FBD111C67C917009634D0 /* Sources */,
 				B55FBD121C67C917009634D0 /* Frameworks */,
@@ -83,9 +84,9 @@
 			);
 			dependencies = (
 			);
-			name = chroma;
+			name = GERazerKitDemo;
 			productName = chroma;
-			productReference = B55FBD151C67C917009634D0 /* chroma */;
+			productReference = B55FBD151C67C917009634D0 /* GERazerKitDemo */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -102,7 +103,7 @@
 					};
 				};
 			};
-			buildConfigurationList = B55FBD101C67C917009634D0 /* Build configuration list for PBXProject "chroma" */;
+			buildConfigurationList = B55FBD101C67C917009634D0 /* Build configuration list for PBXProject "GERazerKitDemo" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -114,7 +115,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B55FBD141C67C917009634D0 /* chroma */,
+				B55FBD141C67C917009634D0 /* GERazerKitDemo */,
 			);
 		};
 /* End PBXProject section */
@@ -124,7 +125,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B55FBD191C67C917009634D0 /* main.m in Sources */,
+				B532D7B91C9C6BB000ADE908 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -213,21 +214,21 @@
 		B55FBD1D1C67C917009634D0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = GERazerKitDemo;
 			};
 			name = Debug;
 		};
 		B55FBD1E1C67C917009634D0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = GERazerKitDemo;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B55FBD101C67C917009634D0 /* Build configuration list for PBXProject "chroma" */ = {
+		B55FBD101C67C917009634D0 /* Build configuration list for PBXProject "GERazerKitDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B55FBD1A1C67C917009634D0 /* Debug */,
@@ -236,7 +237,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B55FBD1C1C67C917009634D0 /* Build configuration list for PBXNativeTarget "chroma" */ = {
+		B55FBD1C1C67C917009634D0 /* Build configuration list for PBXNativeTarget "GERazerKitDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B55FBD1D1C67C917009634D0 /* Debug */,

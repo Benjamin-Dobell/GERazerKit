@@ -38,7 +38,7 @@ void GERazerDictionaryRecursivelyMergeDictionary(CFMutableDictionaryRef mutableD
 		}
 		else
 		{
-			CFPropertyListRef copiedValue2 = GERazerDictionaryCreateMutableDeepCopy(value2);
+			CFPropertyListRef copiedValue2 = CFPropertyListCreateDeepCopy(kCFAllocatorDefault, value2, kCFPropertyListMutableContainersAndLeaves);
 			CFDictionarySetValue(mutableDictionary, key, copiedValue2);
 			CFRelease(copiedValue2);
 		}

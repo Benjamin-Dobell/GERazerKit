@@ -2,9 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:chroma/../GERazerKit/GERazerKit.xcodeproj">
+      location = "group:GERazerKit.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:chroma/chroma.xcodeproj">
+      location = "group:GERazerKitDemo/GERazerKitDemo.xcodeproj">
    </FileRef>
 </Workspace>
