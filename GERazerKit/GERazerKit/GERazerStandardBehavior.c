@@ -104,19 +104,15 @@ bool GERazerSaveProductProfile(SInt32 productId, CFDictionaryRef profile)
 	SInt32 result = GERazerSendMessage(message);
 	GERazerMessageRelease(message);
 
-	if (result != kGERazerTransferSuccess)
+	bool success = result == kGERazerTransferSuccess;
+
+	if (success && activeProfileId && !CFEqual(CFDictionaryGetValue(profile, CFSTR("ProfileID")), activeProfileId))
 	{
-		return false;
+		success = GERazerActivateProductProfile(productId, activeProfileId);
 	}
 
-	if (activeProfileId && !CFEqual(CFDictionaryGetValue(profile, CFSTR("ProfileID")), activeProfileId))
-	{
-		return GERazerActivateProductProfile(productId, activeProfileId);
-	}
-	else
-	{
-		return true;
-	}
+  CFRelease(activeProfileId);
+  return success;
 }
 
 bool GERazerActivateProductProfile(SInt32 productId, CFStringRef profileId)
