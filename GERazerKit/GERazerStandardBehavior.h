@@ -18,6 +18,8 @@ CFArrayRef GERazerCopyAttachedProductIds(void);
 
 CFStringRef GERazerCopyActiveProfileId(SInt32 productId);
 
+CFDictionaryRef GERazerCopyActiveProfile(SInt32 productId);
+
 CFMutableArrayRef GERazerCopyProductProfiles(SInt32 productId);
 
 bool GERazerSaveProductProfile(SInt32 productId, CFDictionaryRef profile);

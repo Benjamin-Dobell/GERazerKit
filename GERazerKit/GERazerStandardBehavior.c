@@ -74,6 +74,38 @@ CFStringRef GERazerCopyActiveProfileId(SInt32 productId)
 	return profileId;
 }
 
+CFDictionaryRef GERazerCopyActiveProfile(SInt32 productId)
+{
+	GERazerMessageRef message = GERazerMessageCreateRetrieveProductAllSettings(productId);
+	GERazerSendMessage(message);
+	GERazerMessageRelease(message);
+
+	GERazerMessageRef responseMessage;
+	GERazerReceiveMessage(kGERazerMessageIdProductAllSettings, &responseMessage, kGERazerStandardBehaviourReceiveTimeout);
+
+	CFMutableDictionaryRef activeProfile = NULL;
+
+	if (responseMessage)
+	{
+		CFStringRef profileId = GERazerMessageDataGetValue(responseMessage, CFSTR("AllDevSettings"), CFSTR("DeviceSettings"), CFSTR("ActiveProfile"), kGERazerTerminate);
+		CFArrayRef profiles = GERazerMessageDataGetValue(responseMessage, CFSTR("AllDevSettings"), CFSTR("Profiles"), kGERazerTerminate);
+
+		if (profileId && profiles)
+		{
+			CFIndex profileIndex = GERazerProfilesGetIndexForProfileId(profiles, profileId);
+
+			if (profileIndex != kCFNotFound)
+			{
+				activeProfile = GERazerDictionaryCreateMutableDeepCopy(CFArrayGetValueAtIndex(profiles, profileIndex));
+			}
+		}
+
+		GERazerMessageRelease(responseMessage);
+	}
+
+	return activeProfile;
+}
+
 CFMutableArrayRef GERazerCopyProductProfiles(SInt32 productId)
 {
 	GERazerMessageRef message = GERazerMessageCreateRetrieveProductAllSettings(productId);
