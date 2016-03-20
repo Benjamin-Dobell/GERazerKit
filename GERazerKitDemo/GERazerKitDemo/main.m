@@ -135,8 +135,8 @@ int main(int argc, const char *argv[])
 
 	CFRelease(effectList);
 
-	GERazerDictionaryRecursivelyMergeThenReleaseDictionary(deviceSettings, GERazerDeviceSettingsCreateWithEnabledLightingEffect(kGERazerLedIdMambaDock, kGERazerEffectIdBreathing));
-	GERazerDictionaryRecursivelyMergeThenReleaseDictionary(deviceSettings, GERazerDeviceSettingsCreateWithEnabledLightingEffect(kGERazerLedIdMambaMouse, kGERazerEffectIdReactive));
+	GERazerDictionaryRecursivelyMergeThenReleaseDictionary(deviceSettings, GERazerDeviceSettingsCreateWithEnabledLightingEffect(kGERazerLedIdMambaDock, kGERazerEffectIdBreathing, kGERazerLightingBrightnessNormal));
+	GERazerDictionaryRecursivelyMergeThenReleaseDictionary(deviceSettings, GERazerDeviceSettingsCreateWithEnabledLightingEffect(kGERazerLedIdMambaMouse, kGERazerEffectIdReactive, kGERazerLightingBrightnessNormal));
 
 	if (followingProductId != kGERazerProductIdNone)
 	{

@@ -42,6 +42,6 @@ CFMutableDictionaryRef GERazerDeviceSettingsCreateWithLedFollowingProduct(SInt32
 
 CFMutableDictionaryRef GERazerDeviceSettingsCreateWithLedEffectList(CFDictionaryRef ledEffectList);
 
-CFMutableDictionaryRef GERazerDeviceSettingsCreateWithEnabledLightingEffect(SInt32 ledId, SInt32 effectId);
+CFMutableDictionaryRef GERazerDeviceSettingsCreateWithEnabledLightingEffect(SInt32 ledId, SInt32 effectId, SInt32 brightness);
 
 #endif /* ! __GERAZERKIT_GERAZERSTANDARDMESSAGES__ */

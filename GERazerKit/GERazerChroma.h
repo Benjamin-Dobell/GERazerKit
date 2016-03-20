@@ -30,6 +30,13 @@ CF_ENUM(SInt32)
 	kGERazerWaveDirectionFrontToBack = 2
 };
 
+CF_ENUM(SInt32)
+{
+	kGERazerLightingBrightnessDim = 33,
+	kGERazerLightingBrightnessNormal = 66,
+	kGERazerLightingBrightnessBright = 100
+};
+
 extern const CFStringRef kGERazerEffectNameStatic;
 extern const CFStringRef kGERazerEffectNameBreathing;
 extern const CFStringRef kGERazerEffectNameSpectrumCycling;

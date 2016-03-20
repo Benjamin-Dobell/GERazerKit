@@ -99,16 +99,25 @@ CFMutableDictionaryRef GERazerDeviceSettingsCreateWithLedEffectList(CFDictionary
 	return deviceSettingsDictionary;
 }
 
-CFMutableDictionaryRef GERazerDeviceSettingsCreateWithEnabledLightingEffect(SInt32 ledId, SInt32 effectId)
+CFMutableDictionaryRef GERazerDeviceSettingsCreateWithEnabledLightingEffect(SInt32 ledId, SInt32 effectId, SInt32 brightness)
 {
 	static const SInt32 enabled = 1;
+
+	static const float meaninglessRed = 0.0;
+	static const float meaninglessGreen = 1.0;
+	static const float meaninglessBlue = 0.0;
 
 	// Led lighting dictionary
 
 	CFMutableDictionaryRef ledLightingDictionary = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 	GERazerDictionarySetThenReleaseValue(ledLightingDictionary, CFSTR("LEDID"), CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &ledId));
 	GERazerDictionarySetThenReleaseValue(ledLightingDictionary, CFSTR("Effect"), CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &effectId));
+	GERazerDictionarySetThenReleaseValue(ledLightingDictionary, CFSTR("Brightness"), CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &brightness));
+
 	GERazerDictionarySetThenReleaseValue(ledLightingDictionary, CFSTR("Enabled"), CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &enabled));
+	GERazerDictionarySetThenReleaseValue(ledLightingDictionary, CFSTR("Red"), CFNumberCreate(kCFAllocatorDefault, kCFNumberFloat32Type, &meaninglessRed));
+	GERazerDictionarySetThenReleaseValue(ledLightingDictionary, CFSTR("Green"), CFNumberCreate(kCFAllocatorDefault, kCFNumberFloat32Type, &meaninglessGreen));
+	GERazerDictionarySetThenReleaseValue(ledLightingDictionary, CFSTR("Blue"), CFNumberCreate(kCFAllocatorDefault, kCFNumberFloat32Type, &meaninglessBlue));
 
 	// Lighting array
 
