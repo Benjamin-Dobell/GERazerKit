@@ -5,6 +5,12 @@
 
 CFTimeInterval kGERazerStandardBehaviourReceiveTimeout = 1.0;
 
+// Used to work around the issue described in GERazerSendMessage's documentation.
+void GERazerReceiveHack(SInt32 productId)
+{
+	GERazerGetBatteryPercentage(productId);
+}
+
 CFIndex GERazerProfilesGetIndexForProfileId(CFArrayRef profiles, CFStringRef profileId)
 {
 	CFIndex profileCount = CFArrayGetCount(profiles);
@@ -183,6 +189,8 @@ bool GERazerActivateProductProfile(SInt32 productId, CFStringRef profileId)
 	GERazerSendMessage(message);
 	GERazerMessageRelease(message);
 
+	GERazerReceiveHack(productId);
+
 	return true;
 }
 
@@ -191,6 +199,8 @@ bool GERazerDeleteProductProfile(SInt32 productId, CFStringRef profileId)
 	GERazerMessageRef message = GERazerMessageCreateDeleteProductProfile(productId, profileId);
 	SInt32 result = GERazerSendMessage(message);
 	GERazerMessageRelease(message);
+
+	GERazerReceiveHack(productId);
 
 	return result == kGERazerTransferSuccess;
 }

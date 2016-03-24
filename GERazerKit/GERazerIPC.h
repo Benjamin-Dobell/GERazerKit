@@ -33,10 +33,9 @@ void GERazerDisconnect(void);
 
 void GERazerRemoveDisconnectedCallback(GERazerDisconnectedCallback callback);
 
-//! Warning: Sending multiple messages with the same message ID in quick succession (< 1 seconds
-//! between messages) seems to result in the Razer Device Manager properly processing the most
-//! recent message only. It is suggested you only send one message with the data of each message
-//! merged using GERazerDictionaryRecursivelyMergeDictionary();
+//! Warning: Sending multiple messages with the same message ID in quick succession, without a
+//! receive inbetween, seems to result in the Razer Device Manager properly processing the most
+//! recent message only.
 SInt32 GERazerSendMessage(GERazerMessageRef message);
 
 //! Can only be called on the run loop returned from GERazerReceiveRunLoopGet().
