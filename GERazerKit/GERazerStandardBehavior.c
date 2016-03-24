@@ -128,6 +128,32 @@ CFMutableArrayRef GERazerCopyProductProfiles(SInt32 productId)
 	return profiles;
 }
 
+SInt32 GERazerGetBatteryPercentage(SInt32 productId)
+{
+	GERazerMessageRef message = GERazerMessageCreateRetrieveProductBatteryPercentage(kGERazerMessageIdProductBatteryPercentage);
+	GERazerSendMessage(message);
+	GERazerMessageRelease(message);
+
+	GERazerMessageRef responseMessage;
+	GERazerReceiveMessage(kGERazerMessageIdProductBatteryPercentage, &responseMessage, kGERazerStandardBehaviourReceiveTimeout);
+
+	SInt32 batteryPercentage = kGERazerBehaviorFailed;
+
+	if (responseMessage)
+	{
+		CFNumberRef boxedBatteryPercentLevel = GERazerMessageDataGetValue(responseMessage, CFSTR("BatteryPercentLevel"), kGERazerTerminate);
+
+		if (boxedBatteryPercentLevel)
+		{
+			CFNumberGetValue(boxedBatteryPercentLevel, kCFNumberSInt32Type, &batteryPercentage);
+		}
+
+		GERazerMessageRelease(responseMessage);
+	}
+
+	return batteryPercentage;
+}
+
 bool GERazerSaveProductProfile(SInt32 productId, CFDictionaryRef profile)
 {
 	CFStringRef originalActiveProfileId = GERazerCopyActiveProfileId(productId);
@@ -178,7 +204,7 @@ SInt32 GERazerGetLedFollowingProductId(SInt32 productId, CFStringRef profileId)
 	GERazerMessageRef responseMessage;
 	GERazerReceiveMessage(kGERazerMessageIdProductAllSettings, &responseMessage, kGERazerStandardBehaviourReceiveTimeout);
 
-	SInt32 followingProductId = kGERazerProductIdNone;
+	SInt32 followingProductId = kGERazerBehaviorFailed;
 
 	if (responseMessage)
 	{
@@ -187,6 +213,8 @@ SInt32 GERazerGetLedFollowingProductId(SInt32 productId, CFStringRef profileId)
 
 		if (profileIndex != kCFNotFound)
 		{
+			followingProductId = kGERazerProductIdNone;
+
 			CFNumberRef boxedFollowingProductId = GERazerMessageDataArrayGetValue(profiles, profileIndex, CFSTR("LEDChromaFollow"), CFSTR("PID"), kGERazerTerminate);
 
 			if (boxedFollowingProductId)

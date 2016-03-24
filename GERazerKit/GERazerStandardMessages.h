@@ -28,6 +28,8 @@ GERazerMessageRef GERazerMessageCreateRetrieveAttachedDevices(void);
 
 GERazerMessageRef GERazerMessageCreateRetrieveProductAllSettings(SInt32 productId);
 
+GERazerMessageRef GERazerMessageCreateRetrieveProductBatteryPercentage(SInt32 productId);
+
 GERazerMessageRef GERazerMessageCreateActivateProductProfile(SInt32 productId, CFStringRef profileId);
 
 GERazerMessageRef GERazerMessageCreateSaveAndActivateProductProfile(SInt32 productId, CFDictionaryRef profile);

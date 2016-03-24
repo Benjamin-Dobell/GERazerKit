@@ -5,6 +5,11 @@
 
 CF_ENUM(SInt32)
 {
+	kGERazerBehaviorFailed = -2147483648
+};
+
+CF_ENUM(SInt32)
+{
 	kGERazerProductIdNone = -1
 };
 
@@ -21,6 +26,8 @@ CFStringRef GERazerCopyActiveProfileId(SInt32 productId);
 CFDictionaryRef GERazerCopyActiveProfile(SInt32 productId);
 
 CFMutableArrayRef GERazerCopyProductProfiles(SInt32 productId);
+
+SInt32 GERazerGetBatteryPercentage(SInt32 productId);
 
 bool GERazerSaveProductProfile(SInt32 productId, CFDictionaryRef profile);
 

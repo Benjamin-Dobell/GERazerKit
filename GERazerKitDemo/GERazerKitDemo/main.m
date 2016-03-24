@@ -138,7 +138,7 @@ int main(int argc, const char *argv[])
 	GERazerDictionaryRecursivelyMergeThenReleaseDictionary(deviceSettings, GERazerDeviceSettingsCreateWithEnabledLightingEffect(kGERazerLedIdMambaDock, kGERazerEffectIdBreathing, kGERazerLightingBrightnessNormal));
 	GERazerDictionaryRecursivelyMergeThenReleaseDictionary(deviceSettings, GERazerDeviceSettingsCreateWithEnabledLightingEffect(kGERazerLedIdMambaMouse, kGERazerEffectIdReactive, kGERazerLightingBrightnessNormal));
 
-	if (followingProductId != kGERazerProductIdNone)
+	if (followingProductId >= 0)
 	{
 		GERazerDictionaryRecursivelyMergeThenReleaseDictionary(deviceSettings, GERazerDeviceSettingsCreateWithLedFollowingProduct(followingProductId, false));
 	}

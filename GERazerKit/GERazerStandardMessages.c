@@ -23,6 +23,17 @@ GERazerMessageRef GERazerMessageCreateRetrieveProductAllSettings(SInt32 productI
 	return message;
 }
 
+GERazerMessageRef GERazerMessageCreateRetrieveProductBatteryPercentage(SInt32 productId)
+{
+	GERazerMessageRef message = GERazerMessageCreate(kGERazerMessageIdProductBatteryPercentage);
+	CFMutableDictionaryRef messageDictionary = GERazerMessageGetData(message);
+
+	GERazerDictionarySetThenReleaseValue(messageDictionary, CFSTR("ProductID"), CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &productId));
+	CFDictionaryAddValue(messageDictionary, CFSTR("ResponseMsgPortName"), kGERazerResponseMsgPortNameDefault);
+
+	return message;
+}
+
 GERazerMessageRef GERazerMessageCreateActivateProductProfile(SInt32 productId, CFStringRef profileId)
 {
 	GERazerMessageRef message = GERazerMessageCreate(kGERazerMessageIdProductActivateProfile);
