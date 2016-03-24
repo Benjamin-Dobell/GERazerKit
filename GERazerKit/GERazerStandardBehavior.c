@@ -169,7 +169,7 @@ bool GERazerDeleteProductProfile(SInt32 productId, CFStringRef profileId)
 	return result == kGERazerTransferSuccess;
 }
 
-SInt32 GERazerGetLedFollowingProductId(SInt32 productId)
+SInt32 GERazerGetLedFollowingProductId(SInt32 productId, CFStringRef profileId)
 {
 	GERazerMessageRef message = GERazerMessageCreateRetrieveProductAllSettings(productId);
 	GERazerSendMessage(message);
@@ -182,11 +182,17 @@ SInt32 GERazerGetLedFollowingProductId(SInt32 productId)
 
 	if (responseMessage)
 	{
-		CFNumberRef boxedFollowingProductId = GERazerMessageDataGetValue(responseMessage, CFSTR("AllDevSettings"), CFSTR("Profiles"), 0, CFSTR("LEDChromaFollow"), CFSTR("PID"), kGERazerTerminate);
+		CFArrayRef profiles = GERazerMessageDataGetValue(responseMessage, CFSTR("AllDevSettings"), CFSTR("Profiles"), kGERazerTerminate);
+		CFIndex profileIndex = GERazerProfilesGetIndexForProfileId(profiles, profileId);
 
-		if (boxedFollowingProductId)
+		if (profileIndex != kCFNotFound)
 		{
-			CFNumberGetValue(boxedFollowingProductId, kCFNumberSInt32Type, &followingProductId);
+			CFNumberRef boxedFollowingProductId = GERazerMessageDataArrayGetValue(profiles, profileIndex, CFSTR("LEDChromaFollow"), CFSTR("PID"), kGERazerTerminate);
+
+			if (boxedFollowingProductId)
+			{
+				CFNumberGetValue(boxedFollowingProductId, kCFNumberSInt32Type, &followingProductId);
+			}
 		}
 
 		GERazerMessageRelease(responseMessage);

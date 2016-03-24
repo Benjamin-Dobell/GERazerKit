@@ -28,7 +28,7 @@ bool GERazerActivateProductProfile(SInt32 productId, CFStringRef profileId);
 
 bool GERazerDeleteProductProfile(SInt32 productId, CFStringRef profileId);
 
-SInt32 GERazerGetLedFollowingProductId(SInt32 productId);
+SInt32 GERazerGetLedFollowingProductId(SInt32 productId, CFStringRef profileId);
 
 bool GERazerSetProductDeviceSettings(SInt32 productId, CFStringRef profileId, CFDictionaryRef deviceSettings);
 

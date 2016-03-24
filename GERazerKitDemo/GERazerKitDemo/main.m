@@ -102,7 +102,7 @@ int main(int argc, const char *argv[])
 		GERazerActivateProductProfile(productId, profileId);
 	}
 
-	SInt32 followingProductId = GERazerGetLedFollowingProductId(productId);
+	SInt32 followingProductId = GERazerGetLedFollowingProductId(productId, profileId);
 
 	// Configure effects
 
