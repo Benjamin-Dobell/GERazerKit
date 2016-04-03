@@ -20,7 +20,7 @@ response_port_offset=$($grep --byte-offset --only-matching -a -e $PATCHED_RESPON
 
 if [  -n "$port_offset" ] || [ -n "$response_port_offset" ]; then
         echo "Killing RzDeviceEngine. It will restart automatically."
-        pid=$(ps aux | grep -m 1 RzDeviceEngine | tr -s ' ' | cut -d ' ' -f 2)
+        pid=$(ps aux | grep -m 1 '[R]zDeviceEngine' | tr -s ' ' | cut -d ' ' -f 2)
         kill -9 $pid 2>/dev/null; "$BASEDIR/bin/monitor"
 else
         echo "The RzDeviceEngine must first be patched. Run:"
