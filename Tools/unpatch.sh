@@ -13,6 +13,7 @@ if [ -n "$($grep --version | grep '2.5.1')" ]; then
 	if [ -z "$($grep --version 2>/dev/null)" ]; then
 		echo "Your system is running grep 2.5.1, which contains a critical bug."
 		echo "Please install a newer grep from Homebrew."
+		exit 1
 	fi
 fi
 
